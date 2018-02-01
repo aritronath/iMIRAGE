@@ -1,0 +1,2 @@
+exportPattern("^[[:alpha:]]+")
+importFrom("stats", "cor", "cor.test", "na.omit", "predict", "sd")
