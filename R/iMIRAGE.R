@@ -117,7 +117,7 @@ mirage_cv <- function (train_pcg, train_mir, gene_index, num=100, folds=5) {
   train_mir <- scale(train_mir)
 
   cat("\nRunning",folds,"folds cross-validation...")
-  kgrp <- split(1:nrwow(train_pcg), sample(1:k, nrow(train_pcg), replace=T))
+  kgrp <- split(1:nrow(train_pcg), sample(1:k, nrow(train_pcg), replace=T))
   for (k in 1:folds) {
 
     cat("\nIteration",k)
@@ -175,7 +175,7 @@ mirage <- function (train_pcg, train_mir, my_pcg, gene_index, num=100) {
   if (mode(gene_index)=="character") y <- scale(train_mir[, match(gene_index, colnames(train_mir))])
 
   if (sd(y)==0) stop ("Error: Standard deviation of miRNA is 0")
-  if (nrow(train_pcg)<200) stop ("Error: Sample size insufficient (<200)")
+  if (nrow(train_pcg)<100) warning("Warning: Sample size is <100")
 
   x <- scale (corf(train_pcg, train_mir, gene_index, num))
 
