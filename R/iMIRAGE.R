@@ -108,7 +108,7 @@ mirage_cv <- function (train_pcg, train_mir, gene_index, num=100, folds=5) {
   if (mode(gene_index)=="numeric" & gene_index > ncol(train_mir))  stop ("Error: miRNA not found in training dataset. Please check ID or rownumber")
   if (mode(gene_index)=="character" & is.na (match (gene_index, colnames(train_mir)))) stop ("Error: miRNA not found. Please check ID or rownumber")
 
-  cv.res <- matrix (nrow=5,ncol=3)
+  cv.res <- matrix (nrow=folds, ncol=3)
   colnames (cv.res) <- c("PCC", "P-Value", "RMSE")
 
   if (mode(gene_index)=="numeric") train_pcg <- scale(corf(train_pcg, train_mir, gene_index, num))
@@ -116,8 +116,10 @@ mirage_cv <- function (train_pcg, train_mir, gene_index, num=100, folds=5) {
 
   train_mir <- scale(train_mir)
 
-  cat("\nRunning",folds,"folds cross-validation...")
-  kgrp <- split(1:nrow(train_pcg), sample(1:k, nrow(train_pcg), replace=T))
+  cat("\nRunning ", folds,"-folds cross-validation...", sep="")
+
+  kgrp <- split(1:nrow(train_pcg), sample(1:folds, nrow(train_pcg), replace=T))
+
   for (k in 1:folds) {
 
     cat("\nIteration", k)
