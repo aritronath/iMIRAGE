@@ -108,8 +108,9 @@ corf <- function (train_pcg, train_mir, gene_index, num=50) {
 #' imirage_cv(train_pcg, train_mir, gene_index="ENSG00000184441", method="RF, num=100)
 #' imirage_cv(train_pcg, train_mir, gene_index=25, method="RF, num=100)
 #' }
-#' @import randomForest, knn.reg
-#'
+#' 
+#' @import randomForest
+#' @import FNN
 #' @export
 imirage_cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=10) {
 
@@ -180,14 +181,13 @@ imirage_cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 #'
 #' @return a numeric vector containing imputed & standardized expression levels of the miRNA
 #'
-#' @import randomForest, knn.reg
-#'
 #' @examples 
 #' /dontrun {
 #' imirage(train_pcg, train_mir, my_pcg, gene_index="ENSG00000228630", method="KNN", num=50)
 #' imirage(train_pcg, train_mir, my_pcg, gene_index=25, method="KNN", num=50)
 #' }
-#'
+#' @import randomForest
+#' @import FNN
 #' @export
 imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50) {
 

@@ -18,8 +18,10 @@ list containing two matrices with common protein coding genes
 Function to return matched matrices with common genes
 }
 \examples{
+/dontrun {
 temp <- match_mat(train_pcg, my_pcg)
 new_train_pcg <- data.matrix(temp[[1]])
 new_my_pcg <- data.matrix(temp[[2]])
+}
 
 }

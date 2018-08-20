@@ -2,23 +2,26 @@
 % Please edit documentation in R/iMIRAGE.R
 \name{posexp}
 \alias{posexp}
-\title{Filter miRNA dataset based on positive expression in a specific percentage of samples}
+\title{Pre-standardization filter for miRNA dataset based on expression threshold in a specific percentage of samples}
 \usage{
-posexp(train_mir, cutoff = 75, threshold = 1)
+posexp(train_mir, cutoff = 75, threshold = 0)
 }
 \arguments{
 \item{train_mir}{a numeric matrix with miRNA expression data}
 
 \item{cutoff}{percentage of samples in which the miRNA should be expressed}
 
-\item{threshold}{the numeric threshold that defines whether the miRNA is expressed or not. Defaults to 1 (for RPKM or FPKM)}
+\item{threshold}{the numeric threshold that defines whether the miRNA is expressed or not. Defaults to 0 (for log (x+1) RPKM or FPKM)}
 }
 \value{
 filtered miRNA expression matrix
 }
 \description{
-Function to return miRNA expression subset containing miRNAs that are expressed in a specific percentage of samples
+This function returns a subset of the miRNA expression dataset containing miRNAs that are expressed in at least a specified percentage of samples based on an expression threshold
 }
 \examples{
-posexp(train_mir, cutoff=75, threshold=1)
+/dontrun {
+posexp(train_mir, cutoff=75, threshold=0)
+}
+
 }

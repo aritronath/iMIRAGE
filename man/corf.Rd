@@ -2,9 +2,9 @@
 % Please edit documentation in R/iMIRAGE.R
 \name{corf}
 \alias{corf}
-\title{Select informative PCG subset}
+\title{Select target genes for constructing imputation models}
 \usage{
-corf(train_pcg, train_mir, gene_index, num = 100)
+corf(train_pcg, train_mir, gene_index, num = 50)
 }
 \arguments{
 \item{train_pcg}{training protein coding dataset. a numeric matrix with row names indicating samples, and column names indicating protein coding gene IDs.}
@@ -13,7 +13,7 @@ corf(train_pcg, train_mir, gene_index, num = 100)
 
 \item{gene_index}{either gene name (character) or index (column number) of miRNA to be imputed.}
 
-\item{num}{number of informative protein coding genes to be used in constructing imputation model. Default is 100 genes.}
+\item{num}{number of informative protein coding genes to be used in constructing imputation model. Default is 50 genes.}
 }
 \value{
 a numeric matrix. subset of protein coding genes correlated with miRNA of interest.
