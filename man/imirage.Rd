@@ -11,7 +11,7 @@ imirage(train_pcg, train_mir, my_pcg, gene_index, method, num = 50)
 
 \item{train_mir}{training miRNA expression dataset. a numeric matrix with row names indicating samples, and column names indicating miRNA IDs}
 
-\item{my_pcg}{test protein coding expression dataset. a numberic matrix with row names indicating samples, and column names indicating protein coding gene IDs.}
+\item{my_pcg}{test protein coding expression dataset. a numeric matrix with row names indicating samples, and column names indicating protein coding gene IDs.}
 
 \item{gene_index}{either gene name (character) or index (column number) of miRNA to be imputed.}
 
