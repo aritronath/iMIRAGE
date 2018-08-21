@@ -121,9 +121,18 @@ imirage_cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
   cv.res <- matrix (nrow=folds, ncol=3)
   colnames (cv.res) <- c("PCC", "P-Value", "RMSE")
 
-  if (mode(gene_index)=="numeric") train_pcg <- scale(corf(train_pcg, train_mir, gene_index, num))
-  if (mode(gene_index)=="character") train_pcg <- scale (corf(train_pcg, train_mir, match(gene_index, colnames(train_pcg)), num))
-
+  if (num >= 50 & ncol(train_pcg) >=50 ) x <- scale (corf(train_pcg, train_mir, gene_index, num))
+  if (ncol(train_pcg) < 50) x <- scale(train_pcg)
+  
+  if (mode(gene_index)=="numeric") {
+    if (num >= 50 & ncol(train_pcg) >=50 ) train_pcg <- scale(corf(train_pcg, train_mir, gene_index, num))
+    if (ncol(train_pcg) < 50) train_pcg <- scale(train_pcg)
+  }
+  if (mode(gene_index)=="character") {
+    if (num >= 50 & ncol(train_pcg) >=50 ) train_pcg <- scale(corf(train_pcg, train_mir, gene_index, num))
+    if (ncol(train_pcg) < 50) train_pcg <- scale(train_pcg)
+  }
+  
   train_mir <- scale(train_mir)
 
   cat("\nRunning ", folds,"-folds cross-validation...", sep="")
@@ -174,7 +183,7 @@ imirage_cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 #'
 #' @param train_pcg training protein coding dataset. a numeric matrix with with row names indicating samples, and column names indicating protein coding gene IDs.
 #' @param train_mir training miRNA expression dataset. a numeric matrix with row names indicating samples, and column names indicating miRNA IDs
-#' @param my_pcg test protein coding expression dataset. a numberic matrix with row names indicating samples, and column names indicating protein coding gene IDs.
+#' @param my_pcg test protein coding expression dataset. a numeric matrix with row names indicating samples, and column names indicating protein coding gene IDs.
 #' @param gene_index either gene name (character) or index (column number) of miRNA to be imputed.
 #' @param method method for imputation, either RF or KNN, for random forests and K-nearest neighbor respectively.
 #' @param num number of informative protein coding genes to be used in constructing imputation model. Default is 50 genes.
@@ -192,7 +201,7 @@ imirage_cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50) {
 
   if (mode(train_pcg)!="numeric" | mode(train_mir)!="numeric" | mode(my_pcg)!="numeric" |
-      class(train_pcg)!="matrix" | class(train_mir)!="matrix" | class(my_pcg)!="matrix") stop ("Error: input data must be numberic matrix")
+      class(train_pcg)!="matrix" | class(train_mir)!="matrix" | class(my_pcg)!="matrix") stop ("Error: input data must be a numeric matrix")
 
   if (mode(gene_index)=="numeric" & gene_index > ncol(train_mir))  stop ("Error: miRNA not found in training dataset. Please check ID or rownumber")
   if (mode(gene_index)=="character" & is.na (match (gene_index, colnames(train_mir)))) stop ("Error: miRNA not found. Please check ID or rownumber")
@@ -200,17 +209,19 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50) {
   if (mode(gene_index)=="character") y <- scale(train_mir[, match(gene_index, colnames(train_mir))])
 
   if (sd(y)==0) stop ("Error: Standard deviation of miRNA is 0")
-  if (nrow(train_pcg)<100) warning("Warning: Sample size is <100")
+  if (nrow(train_pcg)<50) warning("Warning: Sample size is <50")
 
-  x <- scale (corf(train_pcg, train_mir, gene_index, num))
-
+  if (num >= 50 & ncol(train_pcg) >=50 ) x <- scale (corf(train_pcg, train_mir, gene_index, num))
+  if (ncol(train_pcg) < 50) x <- scale(train_pcg)
+  
   if (method=="RF") {
-    rfit <- randomForest(x, y, ntree=50)
+    rfit <- randomForest(x, y, ntree=100)
     predict.y <-  predict(rfit, my_pcg)
     return(predict.y)
   }
+  
   if (method=="KNN"){
-    knn.fit <- knn.reg(train = x, y = y, k=50)
+    knn.fit <- knn.reg(train = x, y = y, k=100)
     return(knn.fit$pred)
   }
 }
