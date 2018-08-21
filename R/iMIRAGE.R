@@ -158,7 +158,7 @@ imirage_cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 
     if(method=="RF") {
       #randomForest
-      imp.rf <- randomForest(x, y, ntree=50)
+      imp.rf <- randomForest(x, y, ntree=500)
       predict.y <- predict(imp.rf, testx)
       r.rf <- cor.test(predict.y, actual.y, method="spearman")
       rmse.rf <- sqrt(mean((actual.y-predict.y)^2))
@@ -215,13 +215,13 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50) {
   if (ncol(train_pcg) < 50) x <- scale(train_pcg)
   
   if (method=="RF") {
-    rfit <- randomForest(x, y, ntree=100)
+    rfit <- randomForest(x, y, ntree=500)
     predict.y <-  predict(rfit, my_pcg)
     return(predict.y)
   }
   
   if (method=="KNN"){
-    knn.fit <- knn.reg(train = x, y = y, k=100)
+    knn.fit <- knn.reg(train = x, y = y, k=50)
     return(knn.fit$pred)
   }
 }
