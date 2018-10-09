@@ -7,27 +7,31 @@
 imirage(train_pcg, train_mir, my_pcg, gene_index, method, num = 50)
 }
 \arguments{
-\item{train_pcg}{training protein coding dataset. a numeric matrix with with row names indicating samples, and column names indicating protein coding gene IDs.}
+\item{train_pcg}{training protein coding dataset. a numeric matrix with with row names indicating
+samples, and column names indicating protein coding gene IDs.}
 
-\item{train_mir}{training miRNA expression dataset. a numeric matrix with row names indicating samples, and column names indicating miRNA IDs}
+\item{train_mir}{training miRNA expression dataset. a numeric matrix with row names indicating 
+samples, and column names indicating miRNA IDs.}
 
-\item{my_pcg}{test protein coding expression dataset. a numeric matrix with row names indicating samples, and column names indicating protein coding gene IDs.}
+\item{my_pcg}{test protein coding expression dataset. a numeric matrix with row names indicating 
+samples, and column names indicating protein coding gene IDs.}
 
 \item{gene_index}{either gene name (character) or index (column number) of miRNA to be imputed.}
 
-\item{method}{method for imputation, either RF or KNN, for random forests and K-nearest neighbor respectively.}
+\item{method}{method for imputation, either RF or KNN, for random forests and K-nearest neighbor 
+respectively.}
 
-\item{num}{number of informative protein coding genes to be used in constructing imputation model. Default is 50 genes.}
+\item{num}{number of informative protein coding genes to be used in constructing imputation model. 
+Default is 50 genes.}
 }
 \value{
-a numeric vector containing imputed & standardized expression levels of the miRNA
+a numeric vector containing imputed & standardized expression levels of the miRNA.
 }
 \description{
 Function to impute miRNA expression profile from protein coding expression dataset
 }
 \examples{
-/dontrun {
 imirage(train_pcg, train_mir, my_pcg, gene_index="ENSG00000228630", method="KNN", num=50)
 imirage(train_pcg, train_mir, my_pcg, gene_index=25, method="KNN", num=50)
-}
+
 }
