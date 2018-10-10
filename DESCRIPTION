@@ -5,8 +5,14 @@ Version: 1.0
 Author: Aritro Nath
 Maintainer: Aritro Nath <aritronath@gmail.com>
 Description: Tools to impute miRNA activity from gene expression. 
-Depends: R (>= 3.4.2), randomForest, FNN
-Imports: stats, randomForest, FNN
+Depends: 
+  R (>= 3.4.2), 
+  randomForest (>= 4.6.12), 
+  FNN (>= 1.1)
+Imports: 
+  stats, 
+  randomForest, 
+  FNN
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
