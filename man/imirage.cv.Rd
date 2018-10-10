@@ -33,7 +33,7 @@ Function to obtain accuracy parameters: correlation coefficient, P-value and RMS
 imputation model
 }
 \examples{
-imirage_cv(train_pcg, train_mir, gene_index="ENSG00000184441", method="RF, num=100)
-imirage_cv(train_pcg, train_mir, gene_index=25, method="RF, num=100)
+imirage_cv(train_pcg, train_mir, gene_index="ENSG00000184441", method="RF", num=100)
+imirage_cv(train_pcg, train_mir, gene_index=25, method="RF", num=100)
 
 }

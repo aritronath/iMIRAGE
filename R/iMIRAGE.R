@@ -149,8 +149,8 @@ corf <- function (train_pcg, train_mir, gene_index, num=50) {
 #' P-value of the fit and root mean squared error (RMSE).
 #'
 #' @examples 
-#' imirage_cv(train_pcg, train_mir, gene_index="ENSG00000184441", method="RF, num=100)
-#' imirage_cv(train_pcg, train_mir, gene_index=25, method="RF, num=100)
+#' imirage_cv(train_pcg, train_mir, gene_index="ENSG00000184441", method="RF", num=100)
+#' imirage_cv(train_pcg, train_mir, gene_index=25, method="RF", num=100)
 #' 
 #' @import randomForest
 #' @import FNN
