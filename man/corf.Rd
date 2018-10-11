@@ -4,7 +4,7 @@
 \alias{corf}
 \title{Filter training gene expression features}
 \usage{
-corf(train_pcg, train_mir, gene_index, num = 50)
+corf(train_pcg, train_mir, gene_index, num = 50, target = FALSE)
 }
 \arguments{
 \item{train_pcg}{training protein coding expression dataset. a numeric matrix with row names 
@@ -13,10 +13,13 @@ indicating samples, and column names indicating protein coding gene IDs.}
 \item{train_mir}{training miRNA expression dataset. a numeric matrix with row names indicating 
 samples, and column names indicating miRNA IDs}
 
-\item{gene_index}{either gene name (character) or index (column number) of miRNA to be imputed.}
+\item{gene_index}{either gene name (character) or index (column number) of the miRNA to be imputed.}
 
 \item{num}{number of informative protein coding genes to be used in constructing imputation model. 
 Default is 50 genes.}
+
+\item{target}{logical, specifying whether protein coding genes should be restricted to predicted 
+targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.}
 }
 \value{
 a numeric matrix. subset of protein coding genes correlated with miRNA of interest.

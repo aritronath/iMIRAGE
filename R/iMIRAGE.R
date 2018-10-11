@@ -114,16 +114,42 @@ match.gex <- function (train_pcg, my_pcg) {
 #' indicating samples, and column names indicating protein coding gene IDs.
 #' @param train_mir training miRNA expression dataset. a numeric matrix with row names indicating 
 #' samples, and column names indicating miRNA IDs
-#' @param gene_index either gene name (character) or index (column number) of miRNA to be imputed.
+#' @param gene_index either gene name (character) or index (column number) of the miRNA to be imputed.
 #' @param num number of informative protein coding genes to be used in constructing imputation model. 
 #' Default is 50 genes.
+#' @param target logical, specifying whether protein coding genes should be restricted to predicted 
+#' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.  
 #'
 #' @return a numeric matrix. subset of protein coding genes correlated with miRNA of interest.
-corf <- function (train_pcg, train_mir, gene_index, num=50) {
-  pcor <- abs(cor(train_pcg, train_mir[, gene_index]))
-  r_pcor <- rank(-pcor)
-  gin <- which (r_pcor < num)
-  temp_pcg <- train_pcg[, gin]
+corf <- function (train_pcg, train_mir, gene_index, num=50, target=FALSE) {
+  if (target==TRUE) {
+    m1 <- grep(colnames(train_mir)[gene_index], ts.pairs$miRNA) #get all entries in the ts.pair table 
+    
+    if (sum(!is.na(m1))==0) { 
+      pcor <- abs(cor(train_pcg, train_mir[, gene_index]))
+      r_pcor <- rank(-pcor)
+      gin <- which (r_pcor < num)
+      temp_pcg <- train_pcg[, gin]
+      warning ("miRNA not found in target-pair table. Using all genes")
+    }
+    
+    if (sum(!is.na(m1)) > 0) {
+      m2 <- match(ts.pairs$GeneID[m1], colnames(train_pcg))  #get target IDs
+      temp <- train_pcg[, na.omit(m2)]
+      pcor <- abs(cor(temp, train_mir[, gene_index]))
+      r_pcor <- rank(-pcor)
+      gin <- which (r_pcor < num)
+      temp_pcg <- train_pcg[, gin]
+    }
+  }
+
+  if (target==FALSE) {
+    pcor <- abs(cor(train_pcg, train_mir[, gene_index]))
+    r_pcor <- rank(-pcor)
+    gin <- which (r_pcor < num)
+    temp_pcg <- train_pcg[, gin]
+  }
+  
   return(temp_pcg)
 }
 
