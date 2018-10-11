@@ -4,7 +4,8 @@
 \alias{imirage}
 \title{iMIRAGE: miRNA Activity from Gene Expression}
 \usage{
-imirage(train_pcg, train_mir, my_pcg, gene_index, method, num = 50)
+imirage(train_pcg, train_mir, my_pcg, gene_index, method, num = 50,
+  target = FALSE)
 }
 \arguments{
 \item{train_pcg}{training protein coding dataset. a numeric matrix with with row names indicating
@@ -23,9 +24,12 @@ respectively.}
 
 \item{num}{number of informative protein coding genes to be used in constructing imputation model. 
 Default is 50 genes.}
+
+\item{target}{logical, specifying whether protein coding genes should be restricted to predicted 
+targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.}
 }
 \value{
-a numeric vector containing imputed & standardized expression levels of the miRNA.
+imputed expression levels of the miRNA.
 }
 \description{
 Function to impute miRNA expression profile from protein coding expression dataset

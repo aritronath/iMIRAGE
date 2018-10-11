@@ -1,7 +1,7 @@
 #' @title Pre-processing gene expression matrix 
 #' 
 #' @description Use this function to perform a number of pre-processing steps, including 
-#' log2 transformation, normalization and standardization of gene expression matrix. 
+#' log transformation, normalization and standardization of gene expression matrix. 
 #' NOTE: If multiple options are set true, the sequence of pre-processing steps
 #' performed are variance filtering, log2 transformation, upper quantile normalization 
 #' and standardization. 
@@ -170,8 +170,10 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target=FALSE) {
 #' Default is 50 genes.
 #' @param folds number specifying folds (k) of cross validation to obtain imputation accuracy. 
 #' Default is k=10.
+#' @param target logical, specifying whether protein coding genes should be restricted to predicted 
+#' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE. 
 #'
-#' @return a matrix with three values corresponding to Pearson's correlation coefficient,
+#' @return a matrix with three values corresponding to Spearman's correlation coefficient,
 #' P-value of the fit and root mean squared error (RMSE).
 #'
 #' @examples 
@@ -181,7 +183,7 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target=FALSE) {
 #' @import randomForest
 #' @import FNN
 #' @export
-imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=10) {
+imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=10, target=FALSE) {
 
   if (mode(gene_index)!="numeric" & mode(gene_index)!="character") stop ("Error: miRNA not found in training dataset. Please check gene name or rownumber")
   if (mode(gene_index)=="numeric" & gene_index > ncol(train_mir))  stop ("Error: miRNA not found in training dataset. Please check ID or rownumber")
@@ -190,15 +192,15 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
   cv.res <- matrix (nrow=folds, ncol=3)
   colnames (cv.res) <- c("PCC", "P-Value", "RMSE")
 
-  if (num >= 50 & ncol(train_pcg) >=50 ) x <- scale (corf(train_pcg, train_mir, gene_index, num))
+  if (num >= 50 & ncol(train_pcg) >=50 ) x <- scale (corf(train_pcg, train_mir, gene_index, num, target))
   if (ncol(train_pcg) < 50) x <- scale(train_pcg)
   
   if (mode(gene_index)=="numeric") {
-    if (num >= 50 & ncol(train_pcg) >=50 ) train_pcg <- scale(corf(train_pcg, train_mir, gene_index, num))
+    if (num >= 50 & ncol(train_pcg) >=50 ) train_pcg <- scale(corf(train_pcg, train_mir, gene_index, num, target))
     if (ncol(train_pcg) < 50) train_pcg <- scale(train_pcg)
   }
   if (mode(gene_index)=="character") {
-    if (num >= 50 & ncol(train_pcg) >=50 ) train_pcg <- scale(corf(train_pcg, train_mir, gene_index, num))
+    if (num >= 50 & ncol(train_pcg) >=50 ) train_pcg <- scale(corf(train_pcg, train_mir, gene_index, num, target))
     if (ncol(train_pcg) < 50) train_pcg <- scale(train_pcg)
   }
   
@@ -261,8 +263,10 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 #' respectively.
 #' @param num number of informative protein coding genes to be used in constructing imputation model. 
 #' Default is 50 genes.
+#' @param target logical, specifying whether protein coding genes should be restricted to predicted 
+#' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE. 
 #'
-#' @return a numeric vector containing imputed & standardized expression levels of the miRNA.
+#' @return imputed expression levels of the miRNA.
 #'
 #' @examples 
 #' imirage(train_pcg, train_mir, my_pcg, gene_index="ENSG00000228630", method="KNN", num=50)
@@ -271,7 +275,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 #' @import randomForest
 #' @import FNN
 #' @export
-imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50) {
+imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50, target=FALSE) {
 
   if (mode(train_pcg)!="numeric" | mode(train_mir)!="numeric" | mode(my_pcg)!="numeric" |
       class(train_pcg)!="matrix" | class(train_mir)!="matrix" | class(my_pcg)!="matrix") stop ("Error: input data must be a numeric matrix")
@@ -284,7 +288,7 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50) {
   if (sd(y)==0) stop ("Error: Standard deviation of miRNA is 0")
   if (nrow(train_pcg)<50) warning("Warning: Sample size is <50")
 
-  if (num >= 50 & ncol(train_pcg) >=50 ) x <- scale (corf(train_pcg, train_mir, gene_index, num))
+  if (num >= 50 & ncol(train_pcg) >=50 ) x <- scale (corf(train_pcg, train_mir, gene_index, num, target))
   if (ncol(train_pcg) < 50) x <- scale(train_pcg)
   
   if (method=="RF") {

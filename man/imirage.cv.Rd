@@ -4,7 +4,8 @@
 \alias{imirage.cv}
 \title{Cross validation function for iMIRAGE imputation accuracy}
 \usage{
-imirage.cv(train_pcg, train_mir, gene_index, num = 50, method, folds = 10)
+imirage.cv(train_pcg, train_mir, gene_index, num = 50, method, folds = 10,
+  target = FALSE)
 }
 \arguments{
 \item{train_pcg}{training protein coding dataset. a numeric matrix with row names indicating 
@@ -23,9 +24,12 @@ respectively.}
 
 \item{folds}{number specifying folds (k) of cross validation to obtain imputation accuracy. 
 Default is k=10.}
+
+\item{target}{logical, specifying whether protein coding genes should be restricted to predicted 
+targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.}
 }
 \value{
-a matrix with three values corresponding to Pearson's correlation coefficient,
+a matrix with three values corresponding to Spearman's correlation coefficient,
 P-value of the fit and root mean squared error (RMSE).
 }
 \description{

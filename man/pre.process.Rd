@@ -22,7 +22,7 @@ a processed gene expression matrix
 }
 \description{
 Use this function to perform a number of pre-processing steps, including 
-log2 transformation, normalization and standardization of gene expression matrix. 
+log transformation, normalization and standardization of gene expression matrix. 
 NOTE: If multiple options are set true, the sequence of pre-processing steps
 performed are variance filtering, log2 transformation, upper quantile normalization 
 and standardization.
