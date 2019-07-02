@@ -122,7 +122,7 @@ mirage_cv <- function (train_pcg, train_mir, gene_index, num=100, folds=5) {
 
   for (k in 1:folds) {
 
-    cat("\nIteration", k)
+    cat("\nIteration ", k, sep="")
     ind <- unlist(kgrp[[k]])
     x <- train_pcg [-ind, ]
     testx <- train_pcg [ind, ]
