@@ -1,7 +1,7 @@
 Package: iMIRAGE
 Type: Package
 Title: iMIRAGE: imputed miRNA activity from gene expression (Title Case)
-Version: 1.0
+Version: 1.1
 Author: Aritro Nath
 Maintainer: Aritro Nath <aritronath@gmail.com>
 Description: Tools to impute miRNA activity from gene expression. 
