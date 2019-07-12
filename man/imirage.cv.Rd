@@ -4,28 +4,28 @@
 \alias{imirage.cv}
 \title{Cross validation function for iMIRAGE imputation accuracy}
 \usage{
-imirage.cv(train_pcg, train_mir, gene_index, num = 50, method, folds = 10,
-  target = FALSE)
+imirage.cv(train_pcg, train_mir, gene_index, num = 50, method,
+  folds = 10, target = FALSE)
 }
 \arguments{
-\item{train_pcg}{training protein coding dataset. a numeric matrix with row names indicating 
+\item{train_pcg}{training protein coding dataset. a numeric matrix with row names indicating
 samples, anSed column names indicating protein coding gene IDs.}
 
-\item{train_mir}{training miRNA expression dataset. a numeric matrix with row names indicating 
+\item{train_mir}{training miRNA expression dataset. a numeric matrix with row names indicating
 samples, and column names indicating miRNA IDs}
 
 \item{gene_index}{either gene name (character) or index (column number) of miRNA to be imputed.}
 
-\item{num}{number of informative protein coding genes to be used in constructing imputation model. 
+\item{num}{number of informative protein coding genes to be used in constructing imputation model.
 Default is 50 genes.}
 
-\item{method}{method for imputation, either RF or KNN, for random forests and K-nearest neighbor 
+\item{method}{method for imputation, either RF or KNN, for random forests and K-nearest neighbor
 respectively.}
 
-\item{folds}{number specifying folds (k) of cross validation to obtain imputation accuracy. 
+\item{folds}{number specifying folds (k) of cross validation to obtain imputation accuracy.
 Default is k=10.}
 
-\item{target}{logical, specifying whether protein coding genes should be restricted to predicted 
+\item{target}{logical, specifying whether protein coding genes should be restricted to predicted
 targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.}
 }
 \value{
@@ -33,7 +33,7 @@ a matrix with three values corresponding to Spearman's correlation coefficient,
 P-value of the fit and root mean squared error (RMSE).
 }
 \description{
-Function to obtain accuracy parameters: correlation coefficient, P-value and RMSE of 
+Function to obtain accuracy parameters: correlation coefficient, P-value and RMSE of
 imputation model
 }
 \examples{

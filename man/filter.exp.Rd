@@ -17,7 +17,7 @@ filter.exp(train_mir, cutoff = 75, threshold = 0)
 filtered miRNA expression matrix
 }
 \description{
-return a subset of the miRNA expression dataset containing miRNAs that are expressed 
+return a subset of the miRNA expression dataset containing miRNAs that are expressed
 in at least a specified percentage of samples based on a user-defined expression threshold
 }
 \examples{

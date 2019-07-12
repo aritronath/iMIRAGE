@@ -11,21 +11,21 @@ imirage(train_pcg, train_mir, my_pcg, gene_index, method, num = 50,
 \item{train_pcg}{training protein coding dataset. a numeric matrix with with row names indicating
 samples, and column names indicating protein coding gene IDs.}
 
-\item{train_mir}{training miRNA expression dataset. a numeric matrix with row names indicating 
+\item{train_mir}{training miRNA expression dataset. a numeric matrix with row names indicating
 samples, and column names indicating miRNA IDs.}
 
-\item{my_pcg}{test protein coding expression dataset. a numeric matrix with row names indicating 
+\item{my_pcg}{test protein coding expression dataset. a numeric matrix with row names indicating
 samples, and column names indicating protein coding gene IDs.}
 
 \item{gene_index}{either gene name (character) or index (column number) of miRNA to be imputed.}
 
-\item{method}{method for imputation, either RF or KNN, for random forests and K-nearest neighbor 
+\item{method}{method for imputation, either RF or KNN, for random forests and K-nearest neighbor
 respectively.}
 
-\item{num}{number of informative protein coding genes to be used in constructing imputation model. 
+\item{num}{number of informative protein coding genes to be used in constructing imputation model.
 Default is 50 genes.}
 
-\item{target}{logical, specifying whether protein coding genes should be restricted to predicted 
+\item{target}{logical, specifying whether protein coding genes should be restricted to predicted
 targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.}
 }
 \value{
