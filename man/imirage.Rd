@@ -5,7 +5,7 @@
 \title{iMIRAGE: miRNA Activity from Gene Expression}
 \usage{
 imirage(train_pcg, train_mir, my_pcg, gene_index, method, num = 50,
-  target = FALSE)
+  target = FALSE, ...)
 }
 \arguments{
 \item{train_pcg}{training protein coding dataset. a numeric matrix with with row names indicating

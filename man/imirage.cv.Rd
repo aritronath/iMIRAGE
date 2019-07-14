@@ -5,7 +5,7 @@
 \title{Cross validation function for iMIRAGE imputation accuracy}
 \usage{
 imirage.cv(train_pcg, train_mir, gene_index, num = 50, method,
-  folds = 10, target = FALSE)
+  folds = 10, target = FALSE, ...)
 }
 \arguments{
 \item{train_pcg}{training protein coding dataset. a numeric matrix with row names indicating

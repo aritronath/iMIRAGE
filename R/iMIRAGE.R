@@ -182,8 +182,10 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target=FALSE) {
 #'
 #' @import randomForest
 #' @import FNN
+#' @import e1071
+#' @import glmnet
 #' @export
-imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=10, target=FALSE) {
+imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=10, target=FALSE, ...) {
 
   if (mode(gene_index)!="numeric" & mode(gene_index)!="character") stop ("Error: miRNA not found in training dataset. Please check gene name or rownumber")
   if (mode(gene_index)=="numeric" & gene_index > ncol(train_mir))  stop ("Error: miRNA not found in training dataset. Please check ID or rownumber")
@@ -229,7 +231,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 
     if(method=="RF") {
       #randomForest
-      imp.rf <- randomForest(x, y, ntree=250)
+      imp.rf <- randomForest(x, y, ntree=250, ...)
       predict.y <- predict(imp.rf, testx)
       r.rf <- cor.test(predict.y, actual.y, method="spearman")
       rmse.rf <- sqrt(mean((actual.y-predict.y)^2))
@@ -238,11 +240,21 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 
     if (method=="KNN") {
       #knn regression
-      knn.fit <- knn.reg(train = x, test = testx, y = y, k=50)
+      knn.fit <- knn.reg(train = x, test = testx, y = y, k=50, ...)
       r.knn <- cor.test(knn.fit$pred, actual.y, method="spearman")
       rmse.knn <- sqrt(mean((actual.y - knn.fit$pred)^2))
       cv.res [k, 1:3] <- c(r.knn$estimate, r.knn$p.value, rmse.knn)
     }
+
+    if (method=="SVM") {
+      #svm regression
+      imp.svm <- svm(x, y, ...)
+      predict.y <- predict(imp.svm, testx)
+      r.svm <- cor.test(predict.y, actual.y, method="spearman")
+      rmse.svm <- sqrt(mean((actual.y-predict.y)^2))
+      cv.res [k, 1:3] <- c(r.svm$estimate, r.svm$p.value, rmse.svm)
+    }
+
   }
   cat("\nCross-validation complete\n")
   return (cv.res)
@@ -274,8 +286,10 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 #'
 #' @import randomForest
 #' @import FNN
+#' @import e1071
+#' @import glmnet
 #' @export
-imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50, target=FALSE) {
+imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50, target=FALSE, ...) {
 
   if (mode(train_pcg)!="numeric" | mode(train_mir)!="numeric" | mode(my_pcg)!="numeric" |
       class(train_pcg)!="matrix" | class(train_mir)!="matrix" | class(my_pcg)!="matrix") stop ("Error: input data must be a numeric matrix")
@@ -291,14 +305,20 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50, t
   if (num >= 50 & ncol(train_pcg) >=50 ) x <- scale (corf(train_pcg, train_mir, gene_index, num, target))
   if (ncol(train_pcg) < 50) x <- scale(train_pcg)
 
-  if (method=="RF") {
-    rfit <- randomForest(x, y, ntree=250)
+  if (method == "RF") {
+    rfit <- randomForest(x, y, ntree=250, ...)
     predict.y <-  predict(rfit, my_pcg)
     return(predict.y)
   }
 
-  if (method=="KNN") {
-    knn.fit <- knn.reg(train = x, y = y, k=50)
+  if (method == "KNN") {
+    knn.fit <- knn.reg(train = x, y = y, k=50, ...)
     return(knn.fit$pred)
+  }
+
+  if (method == "SVM") {
+    svm.fit <- svm(x = x, y = y, ...)
+    predict.y <- predict(svm.fit, my_pcg)
+    return(predict.y)
   }
 }
