@@ -236,6 +236,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
       r.rf <- cor.test(predict.y, actual.y, method="spearman")
       rmse.rf <- sqrt(mean((actual.y-predict.y)^2))
       cv.res [k, 1:3] <- c(r.rf$estimate, r.rf$p.value, rmse.rf)
+      next()
     }
 
     if (method=="KNN") {
@@ -244,6 +245,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
       r.knn <- cor.test(knn.fit$pred, actual.y, method="spearman")
       rmse.knn <- sqrt(mean((actual.y - knn.fit$pred)^2))
       cv.res [k, 1:3] <- c(r.knn$estimate, r.knn$p.value, rmse.knn)
+      next()
     }
 
     if (method=="SVM") {
@@ -253,6 +255,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
       r.svm <- cor.test(predict.y, actual.y, method="spearman")
       rmse.svm <- sqrt(mean((actual.y-predict.y)^2))
       cv.res [k, 1:3] <- c(r.svm$estimate, r.svm$p.value, rmse.svm)
+      next()
     }
 
   }
@@ -322,3 +325,7 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50, t
     return(predict.y)
   }
 }
+
+
+
+
