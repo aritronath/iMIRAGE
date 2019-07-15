@@ -14,7 +14,7 @@ Imports:
   stats, 
   randomForest, 
   FNN,
-  e071
+  e1071
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
