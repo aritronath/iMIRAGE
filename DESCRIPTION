@@ -8,11 +8,13 @@ Description: Tools to impute miRNA activity from gene expression.
 Depends: 
   R (>= 3.4.2), 
   randomForest (>= 4.6.12), 
-  FNN (>= 1.1)
+  FNN (>= 1.1),
+  e1071 (>= 1.7.1)
 Imports: 
   stats, 
   randomForest, 
-  FNN
+  FNN,
+  e071
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
