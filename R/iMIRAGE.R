@@ -164,14 +164,16 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target=FALSE) {
 #' @param train_mir training miRNA expression dataset. a numeric matrix with row names indicating
 #' samples, and column names indicating miRNA IDs
 #' @param gene_index either gene name (character) or index (column number) of miRNA to be imputed.
-#' @param method method for imputation, either RF or KNN, for random forests and K-nearest neighbor
-#' respectively.
+#' @param method method for imputation, either "RF" for random forests, "KNN" for K-nearest neighbor or
+#' "SVM" for support vector machines.
 #' @param num number of informative protein coding genes to be used in constructing imputation model.
 #' Default is 50 genes.
 #' @param folds number specifying folds (k) of cross validation to obtain imputation accuracy.
 #' Default is k=10.
 #' @param target logical, specifying whether protein coding genes should be restricted to predicted
 #' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.
+#' @param ... optional parameters that can be passed on to the machine-learning methods
+#' RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})
 #'
 #' @return a matrix with three values corresponding to Spearman's correlation coefficient,
 #' P-value of the fit and root mean squared error (RMSE).
@@ -263,7 +265,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
   return (cv.res)
 }
 
-#' @title iMIRAGE: miRNA Activity from Gene Expression
+#' @title iMIRAGE: imputated miRNA Activity from Gene Expression
 #'
 #' @description Function to impute miRNA expression profile from protein coding expression dataset
 #'
@@ -274,12 +276,14 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 #' @param my_pcg test protein coding expression dataset. a numeric matrix with row names indicating
 #' samples, and column names indicating protein coding gene IDs.
 #' @param gene_index either gene name (character) or index (column number) of miRNA to be imputed.
-#' @param method method for imputation, either RF or KNN, for random forests and K-nearest neighbor
-#' respectively.
+#' @param method method for imputation, either "RF" for random forests, "KNN" for K-nearest neighbor or
+#' "SVM" for support vector machines.
 #' @param num number of informative protein coding genes to be used in constructing imputation model.
 #' Default is 50 genes.
 #' @param target logical, specifying whether protein coding genes should be restricted to predicted
 #' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.
+#' @param ... optional parameters that can be passed on to the machine-learning methods
+#' RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})
 #'
 #' @return imputed expression levels of the miRNA.
 #'
@@ -292,7 +296,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 #' @import e1071
 #' @import glmnet
 #' @export
-imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50, target=FALSE, ...) {
+imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num=50, target=FALSE, ...) {
 
   if (mode(train_pcg)!="numeric" | mode(train_mir)!="numeric" | mode(my_pcg)!="numeric" |
       class(train_pcg)!="matrix" | class(train_mir)!="matrix" | class(my_pcg)!="matrix") stop ("Error: input data must be a numeric matrix")
@@ -327,5 +331,51 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method, num=50, t
 }
 
 
+#' @title Process cross-validation results
+#' @description This function returns useful information by organizing the output from cross-validation analysis.
+#' Used internatlly by imrage.cv.loop and can be used for processing output from imrage.cv
+#'
+#' @param res The output object from imrage.cv
+#'
+#' @return a processed matrix containing 3 columns: Spearman's correlation coefficient, P-value and root mean
+#' squared error from cross-validation analysis
+#' @export
+CVProc <- function (res) {
+  df <- matrix(nrow=length(res), ncol=ncol(res[[1]]))
+  colnames(df) <- colnames(res[[1]])
+  for (i in 1:length(res)) {
+    df[i,1] <- mean(res[[i]][,1])
+    df[i,2] <- mean(res[[i]][,2])
+    df[i,3] <- mean(res[[i]][,3])
+  }
+  colnames(df) <- c("Coef", "P-value", "RMSE")
+  return(df)
+}
 
+#' @title iMIRAGE cross-validation loop function for full miRNA matrix
+#' @description Convinient wrapper for \link[iMIRAGE]{imrage.cv} that performs cross-validation analysis for
+#' assessing imputation accuracies for all miRNAs using the training datasets
+#' @param train_pcg training protein coding dataset. a numeric matrix with with row names indicating
+#' samples, and column names indicating protein coding gene IDs.
+#' @param train_mir training miRNA expression dataset. a numeric matrix with row names indicating
+#' samples, and column names indicating miRNA IDs.
+#' @param method method for imputation, either "RF" for random forests, "KNN" for K-nearest neighbor or
+#' "SVM" for support vector machines.
+#' @param ... optional parameters that can be passed on to the machine-learning methods
+#' RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})
+#'
+#' @return
+#' @export
+#'
+#' @examples
+imirage.cv.loop <- function (train_pcg, train_mir, method="KNN", ...) {
+  cv.loop <- list()
+  for (i in 1:ncol(temp.mirna)) {
+    cv.loop[[i]] <- imirage.cv(train_pcg, train_mir, gene_index=i, ...)
+    print(i)
+  }
+
+  cv.results <- CVProc(cv.loop)
+  return(cv.results)
+}
 

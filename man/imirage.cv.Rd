@@ -19,14 +19,17 @@ samples, and column names indicating miRNA IDs}
 \item{num}{number of informative protein coding genes to be used in constructing imputation model.
 Default is 50 genes.}
 
-\item{method}{method for imputation, either RF or KNN, for random forests and K-nearest neighbor
-respectively.}
+\item{method}{method for imputation, either "RF" for random forests, "KNN" for K-nearest neighbor or
+"SVM" for support vector machines.}
 
 \item{folds}{number specifying folds (k) of cross validation to obtain imputation accuracy.
 Default is k=10.}
 
 \item{target}{logical, specifying whether protein coding genes should be restricted to predicted
 targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.}
+
+\item{...}{optional parameters that can be passed on to the machine-learning methods
+RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})}
 }
 \value{
 a matrix with three values corresponding to Spearman's correlation coefficient,
