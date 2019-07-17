@@ -172,7 +172,7 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target=FALSE) {
 #' Default is k=10.
 #' @param target logical, specifying whether protein coding genes should be restricted to predicted
 #' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.
-#' @param ... optional parameters that can be passed on to the machine-learning methods
+#' @param ... optional parameters that can be passed on to the machine-learning functions
 #' RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})
 #'
 #' @return a matrix with three values corresponding to Spearman's correlation coefficient,
@@ -277,12 +277,12 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 #' samples, and column names indicating protein coding gene IDs.
 #' @param gene_index either gene name (character) or index (column number) of miRNA to be imputed.
 #' @param method method for imputation, either "RF" for random forests, "KNN" for K-nearest neighbor or
-#' "SVM" for support vector machines.
+#' "SVM" for support vector machines. Uses KNN by default.
 #' @param num number of informative protein coding genes to be used in constructing imputation model.
 #' Default is 50 genes.
 #' @param target logical, specifying whether protein coding genes should be restricted to predicted
 #' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.
-#' @param ... optional parameters that can be passed on to the machine-learning methods
+#' @param ... optional parameters that can be passed on to the machine-learning method:
 #' RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})
 #'
 #' @return imputed expression levels of the miRNA.
@@ -339,7 +339,7 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num
 #'
 #' @return a processed matrix containing 3 columns: Spearman's correlation coefficient, P-value and root mean
 #' squared error from cross-validation analysis
-#' @export
+#' @export CVProc
 CVProc <- function (res) {
   df <- matrix(nrow=length(res), ncol=ncol(res[[1]]))
   colnames(df) <- colnames(res[[1]])
@@ -361,16 +361,17 @@ CVProc <- function (res) {
 #' samples, and column names indicating miRNA IDs.
 #' @param method method for imputation, either "RF" for random forests, "KNN" for K-nearest neighbor or
 #' "SVM" for support vector machines.
-#' @param ... optional parameters that can be passed on to the machine-learning methods
+#' @param ... optional parameters that can be passed on to the machine-learning method:
 #' RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})
 #'
-#' @return
-#' @export
-#'
 #' @examples
+#'
+#' @return a matrix containing Spearman's correlation coefficient, P-value and RMSE from the cross-validation analysis
+#' of the complete miRNA training dataset
+#' @export
 imirage.cv.loop <- function (train_pcg, train_mir, method="KNN", ...) {
   cv.loop <- list()
-  for (i in 1:ncol(temp.mirna)) {
+  for (i in 1:ncol(train_mirna)) {
     cv.loop[[i]] <- imirage.cv(train_pcg, train_mir, gene_index=i, ...)
     print(i)
   }
