@@ -371,7 +371,7 @@ CVProc <- function (res) {
 #' @export
 imirage.cv.loop <- function (train_pcg, train_mir, method="KNN", ...) {
   cv.loop <- list()
-  for (i in 1:ncol(train_mirna)) {
+  for (i in 1:ncol(train_mir)) {
     cv.loop[[i]] <- imirage.cv(train_pcg, train_mir, gene_index=i, ...)
     print(i)
   }
