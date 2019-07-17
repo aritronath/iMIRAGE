@@ -319,7 +319,7 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num
   }
 
   if (method == "KNN") {
-    knn.fit <- knn.reg(train = x, y = y, k=50, ...)
+    knn.fit <- knn.reg(train = x, y = y, test=my_pcg, k=50, ...)
     return(knn.fit$pred)
   }
 
@@ -372,7 +372,7 @@ CVProc <- function (res) {
 imirage.cv.loop <- function (train_pcg, train_mir, method="KNN", ...) {
   cv.loop <- list()
   for (i in 1:ncol(train_mir)) {
-    cv.loop[[i]] <- imirage.cv(train_pcg, train_mir, gene_index=i, ...)
+    cv.loop[[i]] <- imirage.cv(train_pcg, train_mir, gene_index=i, method=method, ...)
     print(i)
   }
 
