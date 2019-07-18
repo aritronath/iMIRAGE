@@ -5,7 +5,7 @@
 \title{Cross validation function for iMIRAGE imputation accuracy}
 \usage{
 imirage.cv(train_pcg, train_mir, gene_index, num = 50, method,
-  folds = 10, target = FALSE, ...)
+  folds = 10, target = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{train_pcg}{training protein coding dataset. a numeric matrix with row names indicating
@@ -28,7 +28,7 @@ Default is k=10.}
 \item{target}{logical, specifying whether protein coding genes should be restricted to predicted
 targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.}
 
-\item{...}{optional parameters that can be passed on to the machine-learning methods
+\item{...}{optional parameters that can be passed on to the machine-learning functions
 RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})}
 }
 \value{

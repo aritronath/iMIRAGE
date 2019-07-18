@@ -20,7 +20,7 @@ samples, and column names indicating protein coding gene IDs.}
 \item{gene_index}{either gene name (character) or index (column number) of miRNA to be imputed.}
 
 \item{method}{method for imputation, either "RF" for random forests, "KNN" for K-nearest neighbor or
-"SVM" for support vector machines.}
+"SVM" for support vector machines. Uses KNN by default.}
 
 \item{num}{number of informative protein coding genes to be used in constructing imputation model.
 Default is 50 genes.}
@@ -28,7 +28,7 @@ Default is 50 genes.}
 \item{target}{logical, specifying whether protein coding genes should be restricted to predicted
 targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.}
 
-\item{...}{optional parameters that can be passed on to the machine-learning methods
+\item{...}{optional parameters that can be passed on to the machine-learning method:
 RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})}
 }
 \value{

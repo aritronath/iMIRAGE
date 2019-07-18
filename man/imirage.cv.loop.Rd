@@ -16,10 +16,17 @@ samples, and column names indicating miRNA IDs.}
 \item{method}{method for imputation, either "RF" for random forests, "KNN" for K-nearest neighbor or
 "SVM" for support vector machines.}
 
-\item{...}{optional parameters that can be passed on to the machine-learning methods
+\item{...}{optional parameters that can be passed on to the machine-learning method:
 RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})}
+}
+\value{
+a matrix containing Spearman's correlation coefficient, P-value and RMSE from the cross-validation analysis
+of the complete miRNA training dataset
 }
 \description{
 Convinient wrapper for \link[iMIRAGE]{imrage.cv} that performs cross-validation analysis for
 assessing imputation accuracies for all miRNAs using the training datasets
+}
+\examples{
+
 }
