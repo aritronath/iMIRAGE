@@ -332,7 +332,6 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num
   }
 }
 
-
 #' @title Process cross-validation results
 #' @description This function returns useful information by organizing the output from cross-validation analysis.
 #' Used internatlly by imrage.cv.loop and can be used for processing output from imrage.cv
