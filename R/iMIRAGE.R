@@ -311,8 +311,8 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num
   if (sd(y)==0) stop ("Error: Standard deviation of miRNA is 0")
   if (nrow(train_pcg)<50) warning("Warning: Sample size is <50")
 
-  if (num >= 50 & ncol(train_pcg) >=50 ) x <- scale (corf(train_pcg, train_mir, gene_index, num, target))
-  if (ncol(train_pcg) < 50) x <- scale(train_pcg)
+  if (num >= 50 & ncol(train_pcg) >=50 ) x <- corf(train_pcg, train_mir, gene_index, num, target)
+  if (ncol(train_pcg) < 50) x <- train_pcg
 
   if (method == "RF") {
     rfit <- randomForest(x, y, ntree=250, ...)
@@ -321,13 +321,15 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num
   }
 
   if (method == "KNN") {
-    knn.fit <- knn.reg(train = x, test = my_pcg, y = y, k=50, ...)
-    return(knn.fit)
+    mX <- match(colnames(x), colnames(my_pcg))
+    predict.y <- knn.reg(train = x, test = my_pcg[,mX], y = y, k=50)
+    return(predict.y)
   }
 
   if (method == "SVM") {
-    svm.fit <- svm(x = x, y = y, ...)
-    predict.y <- predict(svm.fit, my_pcg)
+    mX <- match(colnames(x), colnames(my_pcg))
+    svm.fit <- svm(x = x, y = y)
+    predict.y <- predict(svm.fit, my_pcg[,mX])
     return(predict.y)
   }
 }
