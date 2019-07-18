@@ -336,9 +336,9 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num
 
 #' @title Process cross-validation results
 #' @description This function returns useful information by organizing the output from cross-validation analysis.
-#' Used internatlly by imrage.cv.loop and can be used for processing output from imrage.cv
+#' Used internatlly by imirage.cv.loop and can be used for processing output from imirage.cv
 #'
-#' @param res The output object from imrage.cv
+#' @param res The output object from imirage.cv
 #'
 #' @return a processed matrix containing 3 columns: Spearman's correlation coefficient, P-value and root mean
 #' squared error from cross-validation analysis
@@ -356,7 +356,7 @@ CVProc <- function (res) {
 }
 
 #' @title iMIRAGE cross-validation loop function for full miRNA matrix
-#' @description Convinient wrapper for \link[iMIRAGE]{imrage.cv} that performs cross-validation analysis for
+#' @description Convinient wrapper for \link[iMIRAGE]{imirage.cv} that performs cross-validation analysis for
 #' assessing imputation accuracies for all miRNAs using the training datasets
 #' @param train_pcg training protein coding dataset. a numeric matrix with with row names indicating
 #' samples, and column names indicating protein coding gene IDs.
