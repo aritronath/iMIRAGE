@@ -7,7 +7,7 @@
 CVProc(res)
 }
 \arguments{
-\item{res}{The output object from imrage.cv}
+\item{res}{The output object from imirage.cv}
 }
 \value{
 a processed matrix containing 3 columns: Spearman's correlation coefficient, P-value and root mean
@@ -15,5 +15,5 @@ squared error from cross-validation analysis
 }
 \description{
 This function returns useful information by organizing the output from cross-validation analysis.
-Used internatlly by imrage.cv.loop and can be used for processing output from imrage.cv
+Used internatlly by imirage.cv.loop and can be used for processing output from imirage.cv
 }

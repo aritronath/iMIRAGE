@@ -24,7 +24,7 @@ a matrix containing Spearman's correlation coefficient, P-value and RMSE from th
 of the complete miRNA training dataset
 }
 \description{
-Convinient wrapper for \link[iMIRAGE]{imrage.cv} that performs cross-validation analysis for
+Convinient wrapper for \link[iMIRAGE]{imirage.cv} that performs cross-validation analysis for
 assessing imputation accuracies for all miRNAs using the training datasets
 }
 \examples{
