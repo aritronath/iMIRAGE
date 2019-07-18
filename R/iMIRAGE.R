@@ -196,19 +196,17 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
   cv.res <- matrix (nrow=folds, ncol=3)
   colnames (cv.res) <- c("PCC", "P-Value", "RMSE")
 
-  if (num >= 50 & ncol(train_pcg) >=50 ) x <- scale (corf(train_pcg, train_mir, gene_index, num, target))
-  if (ncol(train_pcg) < 50) x <- scale(train_pcg)
+  if (num >= 50 & ncol(train_pcg) >=50 ) x <- corf(train_pcg, train_mir, gene_index, num, target)
+  if (ncol(train_pcg) < 50) x <- train_pcg
 
   if (mode(gene_index)=="numeric") {
-    if (num >= 50 & ncol(train_pcg) >=50 ) train_pcg <- scale(corf(train_pcg, train_mir, gene_index, num, target))
-    if (ncol(train_pcg) < 50) train_pcg <- scale(train_pcg)
+    if (num >= 50 & ncol(train_pcg) >=50 ) train_pcg <- corf(train_pcg, train_mir, gene_index, num, target)
+    if (ncol(train_pcg) < 50) train_pcg <- train_pcg
   }
   if (mode(gene_index)=="character") {
-    if (num >= 50 & ncol(train_pcg) >=50 ) train_pcg <- scale(corf(train_pcg, train_mir, gene_index, num, target))
-    if (ncol(train_pcg) < 50) train_pcg <- scale(train_pcg)
+    if (num >= 50 & ncol(train_pcg) >=50 ) train_pcg <- corf(train_pcg, train_mir, gene_index, num, target)
+    if (ncol(train_pcg) < 50) train_pcg <- train_pcg
   }
-
-  train_mir <- scale(train_mir)
 
   if (verbose==TRUE) cat("\nRunning ", folds,"-folds cross-validation...", sep="")
 
@@ -267,6 +265,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
   return (cv.res)
 }
 
+
 #' @title iMIRAGE: imputated miRNA Activity from Gene Expression
 #'
 #' @description Function to impute miRNA expression profile from protein coding expression dataset
@@ -305,8 +304,9 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num
 
   if (mode(gene_index)=="numeric" & gene_index > ncol(train_mir))  stop ("Error: miRNA not found in training dataset")
   if (mode(gene_index)=="character" & is.na (match (gene_index, colnames(train_mir)))) stop ("Error: miRNA not found")
-  if (mode(gene_index)=="numeric") y <- scale(train_mir[, gene_index])
-  if (mode(gene_index)=="character") y <- scale(train_mir[, match(gene_index, colnames(train_mir))])
+
+  if (mode(gene_index)=="numeric") y <- train_mir[, gene_index]
+  if (mode(gene_index)=="character") y <- train_mir[, match(gene_index, colnames(train_mir))]
 
   if (sd(y)==0) stop ("Error: Standard deviation of miRNA is 0")
   if (nrow(train_pcg)<50) warning("Warning: Sample size is <50")
@@ -321,7 +321,7 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num
   }
 
   if (method == "KNN") {
-    knn.fit <- knn.reg(train = x, y = y, test=my_pcg, k=50, ...)
+    knn.fit <- knn.reg(train = x, test = my_pcg, y = y, k=50, ...)
     return(knn.fit)
   }
 
