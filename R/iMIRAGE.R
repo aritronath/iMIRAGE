@@ -210,7 +210,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 
   train_mir <- scale(train_mir)
 
-  if (verbose=TRUE) cat("\nRunning ", folds,"-folds cross-validation...", sep="")
+  if (verbose==TRUE) cat("\nRunning ", folds,"-folds cross-validation...", sep="")
 
   kgrp <- split(1:nrow(train_pcg), sample(1:folds, nrow(train_pcg), replace=T))
 
@@ -262,7 +262,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 
   }
 
-  if (verbose=TRUE) cat("\nCross-validation complete\n")
+  if (verbose==TRUE) cat("\nCross-validation complete\n")
 
   return (cv.res)
 }
