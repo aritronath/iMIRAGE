@@ -322,7 +322,7 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num
 
   if (method == "KNN") {
     mX <- match(colnames(x), colnames(my_pcg))
-    predict.y <- knn.reg(train = x, test = my_pcg[,mX], y = y, k=50)
+    predict.y <- knn.reg(train = x, test = my_pcg[,mX], y = y, k=50)$pred
     return(predict.y)
   }
 
