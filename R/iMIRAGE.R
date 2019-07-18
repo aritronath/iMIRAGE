@@ -187,7 +187,7 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target=FALSE) {
 #' @import e1071
 #' @import glmnet
 #' @export
-imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=10, target=FALSE, ...) {
+imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=10, target=FALSE, verbose=TRUE, ...) {
 
   if (mode(gene_index)!="numeric" & mode(gene_index)!="character") stop ("Error: miRNA not found in training dataset. Please check gene name or rownumber")
   if (mode(gene_index)=="numeric" & gene_index > ncol(train_mir))  stop ("Error: miRNA not found in training dataset. Please check ID or rownumber")
@@ -210,7 +210,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 
   train_mir <- scale(train_mir)
 
-  cat("\nRunning ", folds,"-folds cross-validation...", sep="")
+  if (verbose=TRUE) cat("\nRunning ", folds,"-folds cross-validation...", sep="")
 
   kgrp <- split(1:nrow(train_pcg), sample(1:folds, nrow(train_pcg), replace=T))
 
@@ -261,7 +261,9 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
     }
 
   }
-  cat("\nCross-validation complete\n")
+
+  if (verbose=TRUE) cat("\nCross-validation complete\n")
+
   return (cv.res)
 }
 
@@ -320,7 +322,7 @@ imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num
 
   if (method == "KNN") {
     knn.fit <- knn.reg(train = x, y = y, test=my_pcg, k=50, ...)
-    return(knn.fit$pred)
+    return(knn.fit)
   }
 
   if (method == "SVM") {
