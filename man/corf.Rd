@@ -4,7 +4,7 @@
 \alias{corf}
 \title{Filter training gene expression features}
 \usage{
-corf(train_pcg, train_mir, gene_index, num = 50, target = FALSE)
+corf(train_pcg, train_mir, gene_index, num = 50, target)
 }
 \arguments{
 \item{train_pcg}{training protein coding expression dataset. a numeric matrix with row names
