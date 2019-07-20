@@ -122,7 +122,7 @@ match.gex <- function (train_pcg, my_pcg) {
 #'
 #' @return a numeric matrix. subset of protein coding genes correlated with miRNA of interest.
 #' @export corf
-corf <- function (train_pcg, train_mir, gene_index, num=50, ...) {
+corf <- function (train_pcg, train_mir, gene_index, num=50, target) {
   if (mode(target)=="logical" && target==TRUE) {
     m1 <- grep(colnames(train_mir)[gene_index], ts.pairs$miRNA) #get all entries in the ts.pair table
 
@@ -144,7 +144,7 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, ...) {
     }
   }
 
-  if (missing(target) | (mode(target)=="logical" && target==FALSE)) {
+  if (missing(target) | target==FALSE) {
     pcor <- abs(cor(train_pcg, train_mir[, gene_index]))
     r_pcor <- rank(-pcor)
     gin <- which (r_pcor < num)
