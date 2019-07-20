@@ -123,7 +123,7 @@ match.gex <- function (train_pcg, my_pcg) {
 #' @return a numeric matrix. subset of protein coding genes correlated with miRNA of interest.
 #' @export corf
 corf <- function (train_pcg, train_mir, gene_index, num=50, target) {
-  if (mode(target)=="logical" && target==TRUE) {
+  if (target==TRUE) {
     m1 <- grep(colnames(train_mir)[gene_index], ts.pairs$miRNA) #get all entries in the ts.pair table
 
     if (sum(!is.na(m1))==0) {
@@ -133,7 +133,6 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target) {
       temp_pcg <- train_pcg[, gin]
       warning ("miRNA not found in target-pair table. Using all genes")
     }
-
     if (sum(!is.na(m1)) > 0) {
       m2 <- match(ts.pairs$GeneID[m1], colnames(train_pcg))  #get target IDs
       temp <- train_pcg[, na.omit(m2)]
@@ -142,16 +141,12 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target) {
       gin <- which (r_pcor < num)
       temp_pcg <- train_pcg[, gin]
     }
-  }
-
-  if (missing(target) | target==FALSE) {
+  } else if (target==FALSE) {
     pcor <- abs(cor(train_pcg, train_mir[, gene_index]))
     r_pcor <- rank(-pcor)
     gin <- which (r_pcor < num)
     temp_pcg <- train_pcg[, gin]
-  }
-
-  if (mode(target) == "character") {
+  } else if (mode(target) == "character") {
     m1 <- grep(colnames(train_mir)[gene_index], target$miRNA) #get all entries in the ts.pair table
 
     if (sum(!is.na(m1))==0) {
@@ -169,7 +164,8 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target) {
       r_pcor <- rank(-pcor)
       gin <- which (r_pcor < num)
       temp_pcg <- train_pcg[, gin]
-    }
+    } else print("Error:argument for 'target' should either be logical to specify usage of TargetScan pairs or character
+                 specfying dataframe or matrix with custom miRNA-target gene pairs")
   }
 
   return(temp_pcg)
