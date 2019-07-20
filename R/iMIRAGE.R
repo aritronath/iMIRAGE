@@ -121,8 +121,8 @@ match.gex <- function (train_pcg, my_pcg) {
 #' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.
 #'
 #' @return a numeric matrix. subset of protein coding genes correlated with miRNA of interest.
-corf <- function (train_pcg, train_mir, gene_index, num=50, target=FALSE) {
-  if (target==TRUE) {
+corf <- function (train_pcg, train_mir, gene_index, num=50, target) {
+  if (mode(target)=="logical" && target==TRUE) {
     m1 <- grep(colnames(train_mir)[gene_index], ts.pairs$miRNA) #get all entries in the ts.pair table
 
     if (sum(!is.na(m1))==0) {
@@ -143,11 +143,32 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target=FALSE) {
     }
   }
 
-  if (target==FALSE) {
+  if (missing(target) | (mode(target)=="logical" && target==FALSE)) {
     pcor <- abs(cor(train_pcg, train_mir[, gene_index]))
     r_pcor <- rank(-pcor)
     gin <- which (r_pcor < num)
     temp_pcg <- train_pcg[, gin]
+  }
+
+  if (mode(target) == "character") {
+    m1 <- grep(colnames(train_mir)[gene_index], target$miRNA) #get all entries in the ts.pair table
+
+    if (sum(!is.na(m1))==0) {
+      pcor <- abs(cor(train_pcg, train_mir[, gene_index]))
+      r_pcor <- rank(-pcor)
+      gin <- which (r_pcor < num)
+      temp_pcg <- train_pcg[, gin]
+      warning ("miRNA not found in target-pair table. Using all genes")
+    }
+
+    if (sum(!is.na(m1)) > 0) {
+      m2 <- match(target$GeneID[m1], colnames(train_pcg))  #get target IDs
+      temp <- train_pcg[, na.omit(m2)]
+      pcor <- abs(cor(temp, train_mir[, gene_index]))
+      r_pcor <- rank(-pcor)
+      gin <- which (r_pcor < num)
+      temp_pcg <- train_pcg[, gin]
+    }
   }
 
   return(temp_pcg)
