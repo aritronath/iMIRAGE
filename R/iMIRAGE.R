@@ -121,6 +121,7 @@ match.gex <- function (train_pcg, my_pcg) {
 #' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.
 #'
 #' @return a numeric matrix. subset of protein coding genes correlated with miRNA of interest.
+#' @export corf
 corf <- function (train_pcg, train_mir, gene_index, num=50, target) {
   if (mode(target)=="logical" && target==TRUE) {
     m1 <- grep(colnames(train_mir)[gene_index], ts.pairs$miRNA) #get all entries in the ts.pair table
@@ -207,7 +208,7 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target) {
 #' @import FNN
 #' @import e1071
 #' @import glmnet
-#' @export
+#' @export imirage.cv
 imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=10, target=FALSE, verbose=TRUE, ...) {
 
   if (mode(gene_index)!="numeric" & mode(gene_index)!="character") stop ("Error: miRNA not found in training dataset. Please check gene name or rownumber")
@@ -319,7 +320,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 #' @import FNN
 #' @import e1071
 #' @import glmnet
-#' @export
+#' @export imirage
 imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num=50, target=FALSE, ...) {
 
   if (mode(train_pcg)!="numeric" | mode(train_mir)!="numeric" | mode(my_pcg)!="numeric" |
@@ -394,7 +395,7 @@ CVProc <- function (res) {
 #'
 #' @return a matrix containing Spearman's correlation coefficient, P-value and RMSE from the cross-validation analysis
 #' of the complete miRNA training dataset
-#' @export
+#' @export imirage.cv.loop
 imirage.cv.loop <- function (train_pcg, train_mir, method="KNN", ...) {
   cv.loop <- list()
   for (i in 1:ncol(train_mir)) {
