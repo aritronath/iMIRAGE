@@ -117,13 +117,15 @@ match.gex <- function (train_pcg, my_pcg) {
 #' @param gene_index either gene name (character) or index (column number) of the miRNA to be imputed.
 #' @param num number of informative protein coding genes to be used in constructing imputation model.
 #' Default is 50 genes.
-#' @param target logical, specifying whether protein coding genes should be restricted to predicted
-#' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.
+#' @param target "none" (default), "ts.pairs", or dataframe/matrix/list.
+#' this argument accepts character strings to indicate the use of all candidate genes as predictors ("none),
+#' or use built-in TargetScan miRNA-gene pairs ("ts.pairs"). also accepts a dataframe , matrix or list object
+#' containing a column with names of miRNA and a column with the names of target genes.
 #'
 #' @return a numeric matrix. subset of protein coding genes correlated with miRNA of interest.
 #' @export corf
-corf <- function (train_pcg, train_mir, gene_index, num=50, target) {
-  if (target==TRUE) {
+corf <- function (train_pcg, train_mir, gene_index, num=50, target="none") {
+  if (target=="ts.pairs") {
     m1 <- grep(colnames(train_mir)[gene_index], ts.pairs$miRNA) #get all entries in the ts.pair table
 
     if (sum(!is.na(m1))==0) {
@@ -141,13 +143,15 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target) {
       gin <- which (r_pcor < num)
       temp_pcg <- train_pcg[, gin]
     }
-  } else if (target==FALSE) {
+  } else if (target=="none") {
     pcor <- abs(cor(train_pcg, train_mir[, gene_index]))
     r_pcor <- rank(-pcor)
     gin <- which (r_pcor < num)
     temp_pcg <- train_pcg[, gin]
-  } else if (mode(target) == "character") {
-    m1 <- grep(colnames(train_mir)[gene_index], target$miRNA) #get all entries in the ts.pair table
+  } else {
+    mirs <- grep("mirna", colnames(target), ignore.case=TRUE)
+    gens <- grep("gene", colnames(target), ignore.case=TRUE)
+    m1 <- grep(colnames(train_mir)[gene_index], target[,mirs]) #get all entries in the ts.pair table
 
     if (sum(!is.na(m1))==0) {
       pcor <- abs(cor(train_pcg, train_mir[, gene_index]))
@@ -158,19 +162,17 @@ corf <- function (train_pcg, train_mir, gene_index, num=50, target) {
     }
 
     if (sum(!is.na(m1)) > 0) {
-      m2 <- match(target$GeneID[m1], colnames(train_pcg))  #get target IDs
+      m2 <- match(target[m1,gens], colnames(train_pcg))  #get target IDs
       temp <- train_pcg[, na.omit(m2)]
       pcor <- abs(cor(temp, train_mir[, gene_index]))
       r_pcor <- rank(-pcor)
       gin <- which (r_pcor < num)
       temp_pcg <- train_pcg[, gin]
-    } else print("Error:argument for 'target' should either be logical to specify usage of TargetScan pairs or character
-                 specfying dataframe or matrix with custom miRNA-target gene pairs")
+    }
   }
 
   return(temp_pcg)
 }
-
 
 #' @title Cross validation function for iMIRAGE imputation accuracy
 #'
