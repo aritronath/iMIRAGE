@@ -229,13 +229,16 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
     if (ncol(train_pcg) < 50) train_pcg <- train_pcg
   }
 
-  if (verbose==TRUE) cat("\nRunning ", folds,"-folds cross-validation...", sep="")
+  cat("\nRunning ", folds,"-folds cross-validation...", sep="")
 
   kgrp <- split(1:nrow(train_pcg), sample(1:folds, nrow(train_pcg), replace=T))
 
   for (k in 1:folds) {
 
-    cat("\nIteration ", k, sep="")
+    if(verbose==TRUE) {
+      cat("\nIteration ", k, sep="")
+    } else print("")
+
     ind <- unlist(kgrp[[k]])
     x <- train_pcg [-ind, ]
     testx <- train_pcg [ind, ]
@@ -282,7 +285,6 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
   }
 
   if (verbose==TRUE) cat("\nCross-validation complete\n")
-
   return (cv.res)
 }
 
