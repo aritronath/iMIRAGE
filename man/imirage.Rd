@@ -5,7 +5,7 @@
 \title{iMIRAGE: imputated miRNA Activity from Gene Expression}
 \usage{
 imirage(train_pcg, train_mir, my_pcg, gene_index, method = "KNN",
-  num = 50, target = FALSE, ...)
+  num = 50, target = "none", ...)
 }
 \arguments{
 \item{train_pcg}{training protein coding dataset. a numeric matrix with with row names indicating
@@ -25,8 +25,10 @@ samples, and column names indicating protein coding gene IDs.}
 \item{num}{number of informative protein coding genes to be used in constructing imputation model.
 Default is 50 genes.}
 
-\item{target}{logical, specifying whether protein coding genes should be restricted to predicted
-targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.}
+\item{target}{"none" (default), "ts.pairs", or dataframe/matrix/list.
+this argument accepts character strings to indicate the use of all candidate genes as predictors ("none),
+or use built-in TargetScan miRNA-gene pairs ("ts.pairs"). also accepts a dataframe , matrix or list object
+containing a column with names of miRNA and a column with the names of target genes.}
 
 \item{...}{optional parameters that can be passed on to the machine-learning method:
 RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})}
@@ -38,10 +40,8 @@ a numeric vector with imputed expression levels of the miRNA
 Function to impute miRNA expression profile from protein coding expression dataset
 }
 \examples{
-\\code{
 data(iMIRAGE.datasets)
 imirage(GA.pcg, GA.mir, HS.pcg, gene_index="hsa-let-7c", method="KNN", num=50)
 imirage(GA.pcg, GA.mir, HS.pcg, gene_index=25, method="KNN", num=50)
-}
 
 }

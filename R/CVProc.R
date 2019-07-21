@@ -1,6 +1,7 @@
 #' @title Process cross-validation results
 #' @description This function returns useful information by organizing the output from cross-validation analysis.
-#' Used internatlly by imirage.cv.loop and can be used for processing output from imirage.cv
+#' Used internatlly by \link[iMIRAGE]{imirage.cv.loop} and can also be used to processing output from
+#' \link[iMIRAGE]{imirage.cv}
 #'
 #' @param res The output object from imirage.cv
 #'

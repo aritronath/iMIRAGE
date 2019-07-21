@@ -15,8 +15,10 @@
 #' Default is 50 genes.
 #' @param folds number specifying folds (k) of cross validation to obtain imputation accuracy.
 #' Default is k=10.
-#' @param target logical, specifying whether protein coding genes should be restricted to predicted
-#' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.
+#' @param target "none" (default), "ts.pairs", or dataframe/matrix/list.
+#' this argument accepts character strings to indicate the use of all candidate genes as predictors ("none),
+#' or use built-in TargetScan miRNA-gene pairs ("ts.pairs"). also accepts a dataframe , matrix or list object
+#' containing a column with names of miRNA and a column with the names of target genes.
 #' @param ... optional parameters that can be passed on to the machine-learning functions
 #' RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})
 #'
@@ -24,15 +26,16 @@
 #' P-value of the fit and root mean squared error (RMSE).
 #'
 #' @examples
-#' imirage_cv(train_pcg, train_mir, gene_index="ENSG00000184441", method="RF", num=100)
-#' imirage_cv(train_pcg, train_mir, gene_index=25, method="RF", num=100)
+#' data(iMIRAGE.datasets)
+#' imirage.cv(GA.pcg, GA.mir, gene_index="hsa-let-7c", method="KNN", num=50)
+#' imirage.cv(GA.pcg, GA.mir, gene_index=25, method="KNN", num=50)
 #'
 #' @import randomForest
 #' @import FNN
 #' @import e1071
-#' @import glmnet
+#'
 #' @export imirage.cv
-imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=10, target=FALSE, verbose=TRUE, ...) {
+imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=10, target="none", ...) {
 
   if (mode(gene_index)!="numeric" & mode(gene_index)!="character") stop ("Error: miRNA not found in training dataset. Please check gene name or rownumber")
   if (mode(gene_index)=="numeric" & gene_index > ncol(train_mir))  stop ("Error: miRNA not found in training dataset. Please check ID or rownumber")
@@ -59,9 +62,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 
   for (k in 1:folds) {
 
-    if(verbose==TRUE) {
-      cat("\nIteration ", k, sep="")
-    } else print("")
+    cat("\nIteration ", k, sep="")
 
     ind <- unlist(kgrp[[k]])
     x <- train_pcg [-ind, ]
@@ -108,6 +109,6 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
 
   }
 
-  if (verbose==TRUE) cat("\nCross-validation complete\n")
+  cat("\nCross-validation complete\n")
   return (cv.res)
 }

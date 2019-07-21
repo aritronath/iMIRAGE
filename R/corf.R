@@ -1,8 +1,9 @@
 
 #' @title Filter training gene expression features
 #'
-#' @description Function to filter informative protein coding genes based on correlation with
-#' miRNA expression
+#' @description Internal function used by \link[iMIRAGE]{imirage.cv}, \link[iMIRAGE]{imirage.cv.loop},
+#' and \link[iMIRAGE]{imirage.cv} to filter informative protein coding genes based on correlation with
+#' miRNA expression.
 #'
 #' @param train_pcg training protein coding expression dataset. a numeric matrix with row names
 #' indicating samples, and column names indicating protein coding gene IDs.
@@ -16,7 +17,7 @@
 #' or use built-in TargetScan miRNA-gene pairs ("ts.pairs"). also accepts a dataframe , matrix or list object
 #' containing a column with names of miRNA and a column with the names of target genes.
 #'
-#' @return a numeric matrix. subset of protein coding genes correlated with miRNA of interest.
+#' @return a numeric matrix containing subset of protein coding genes correlated with miRNA of interest.
 #' @export corf
 corf <- function (train_pcg, train_mir, gene_index, num=50, target="none") {
   if (target=="ts.pairs") {

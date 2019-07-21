@@ -5,7 +5,7 @@
 \title{Cross validation function for iMIRAGE imputation accuracy}
 \usage{
 imirage.cv(train_pcg, train_mir, gene_index, num = 50, method,
-  folds = 10, target = FALSE, verbose = TRUE, ...)
+  folds = 10, target = "none", ...)
 }
 \arguments{
 \item{train_pcg}{training protein coding dataset. a numeric matrix with row names indicating
@@ -25,8 +25,10 @@ Default is 50 genes.}
 \item{folds}{number specifying folds (k) of cross validation to obtain imputation accuracy.
 Default is k=10.}
 
-\item{target}{logical, specifying whether protein coding genes should be restricted to predicted
-targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.}
+\item{target}{"none" (default), "ts.pairs", or dataframe/matrix/list.
+this argument accepts character strings to indicate the use of all candidate genes as predictors ("none),
+or use built-in TargetScan miRNA-gene pairs ("ts.pairs"). also accepts a dataframe , matrix or list object
+containing a column with names of miRNA and a column with the names of target genes.}
 
 \item{...}{optional parameters that can be passed on to the machine-learning functions
 RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})}
@@ -40,7 +42,8 @@ Function to obtain accuracy parameters: correlation coefficient, P-value and RMS
 imputation model
 }
 \examples{
-imirage_cv(train_pcg, train_mir, gene_index="ENSG00000184441", method="RF", num=100)
-imirage_cv(train_pcg, train_mir, gene_index=25, method="RF", num=100)
+data(iMIRAGE.datasets)
+imirage.cv(GA.pcg, GA.mir, gene_index="hsa-let-7c", method="KNN", num=50)
+imirage.cv(GA.pcg, GA.mir, gene_index=25, method="KNN", num=50)
 
 }

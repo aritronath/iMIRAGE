@@ -28,5 +28,7 @@ Convinient wrapper for \link[iMIRAGE]{imirage.cv} that performs cross-validation
 assessing imputation accuracies for all miRNAs using the training datasets
 }
 \examples{
+imirage.cv.loop(train_pcg = GA.pcg, train_mir = GA.mir, method = "KNN")
+imirage.cv.loop(train_pcg = GA.pcg, train_mir = GA.mir, method = "SVM")
 
 }

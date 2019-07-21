@@ -21,6 +21,6 @@ return a subset of the miRNA expression dataset containing miRNAs that are expre
 in at least a specified percentage of samples based on a user-defined expression threshold
 }
 \examples{
-filter.exp(train_mir, cutoff=75, threshold=0)
+New.mir <-  filter.exp(GA.mir, cutoff=95, threshold=0)
 
 }

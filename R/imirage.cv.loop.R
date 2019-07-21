@@ -12,6 +12,8 @@
 #' RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})
 #'
 #' @examples
+#' imirage.cv.loop(train_pcg = GA.pcg, train_mir = GA.mir, method = "KNN")
+#' imirage.cv.loop(train_pcg = GA.pcg, train_mir = GA.mir, method = "SVM")
 #'
 #' @return a matrix containing Spearman's correlation coefficient, P-value and RMSE from the cross-validation analysis
 #' of the complete miRNA training dataset

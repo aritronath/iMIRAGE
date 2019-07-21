@@ -29,6 +29,6 @@ performed are variance filtering, log2 transformation, upper quantile normalizat
 and standardization.
 }
 \examples{
-train_pcg <- pre.process(train_pcg)
+Proc.GA.pcg <- pre.process(GA.pcg)
 
 }

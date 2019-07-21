@@ -9,7 +9,7 @@
 #' @return filtered miRNA expression matrix
 #'
 #' @examples
-#' filter.exp(train_mir, cutoff=75, threshold=0)
+#' New.mir <-  filter.exp(GA.mir, cutoff=95, threshold=0)
 #'
 #' @export
 filter.exp <- function (train_mir, cutoff=75, threshold=0) {

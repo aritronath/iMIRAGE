@@ -9,9 +9,9 @@
 #' @return A list containing two matrices with common genes
 #'
 #' @examples
-#' temp <- match.gex(train_pcg, my_pcg)
-#' train_pcg <- data.matrix(temp[[1]])
-#' my_pcg <- data.matrix(temp[[2]])
+#' temp <- match.gex(GA.pcg, HS.pcg)
+#' Matched.GA.pcg <- data.matrix(temp[[1]])
+#' Matched.HS.pcg <- data.matrix(temp[[2]])
 #'
 #' @export
 match.gex <- function (train_pcg, my_pcg) {

@@ -14,26 +14,26 @@
 #' "SVM" for support vector machines. Uses KNN by default.
 #' @param num number of informative protein coding genes to be used in constructing imputation model.
 #' Default is 50 genes.
-#' @param target logical, specifying whether protein coding genes should be restricted to predicted
-#' targets of the miRNA (from TargetScan) or use all genes as candidates. Default = FALSE.
+#' @param target "none" (default), "ts.pairs", or dataframe/matrix/list.
+#' this argument accepts character strings to indicate the use of all candidate genes as predictors ("none),
+#' or use built-in TargetScan miRNA-gene pairs ("ts.pairs"). also accepts a dataframe , matrix or list object
+#' containing a column with names of miRNA and a column with the names of target genes.
 #' @param ... optional parameters that can be passed on to the machine-learning method:
 #' RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})
 #'
 #' @return a numeric vector with imputed expression levels of the miRNA
 #'
 #' @examples
-#' \code{
 #' data(iMIRAGE.datasets)
 #' imirage(GA.pcg, GA.mir, HS.pcg, gene_index="hsa-let-7c", method="KNN", num=50)
 #' imirage(GA.pcg, GA.mir, HS.pcg, gene_index=25, method="KNN", num=50)
-#' }
 #'
 #' @import randomForest
 #' @import FNN
 #' @import e1071
-#' @import glmnet
+#'
 #' @export imirage
-imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num=50, target=FALSE, ...) {
+imirage <- function (train_pcg, train_mir, my_pcg, gene_index, method="KNN", num=50, target="none", ...) {
 
   if (mode(train_pcg)!="numeric" | mode(train_mir)!="numeric" | mode(my_pcg)!="numeric" |
       class(train_pcg)!="matrix" | class(train_mir)!="matrix" | class(my_pcg)!="matrix") stop ("Error: input data must be a numeric matrix")

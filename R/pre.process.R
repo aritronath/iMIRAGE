@@ -15,7 +15,7 @@
 #' @return a processed gene expression matrix
 #'
 #' @examples
-#' train_pcg <- pre.process(train_pcg)
+#' Proc.GA.pcg <- pre.process(GA.pcg)
 #'
 #' @export
 pre.process <- function (gex, var.filter=TRUE, log=FALSE, UQ=FALSE, std=TRUE) {
