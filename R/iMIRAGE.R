@@ -19,11 +19,14 @@
 #' @param ... optional parameters that can be passed on to the machine-learning method:
 #' RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})
 #'
-#' @return imputed expression levels of the miRNA.
+#' @return a numeric vector with imputed expression levels of the miRNA
 #'
 #' @examples
-#' imirage(train_pcg, train_mir, my_pcg, gene_index="ENSG00000228630", method="KNN", num=50)
-#' imirage(train_pcg, train_mir, my_pcg, gene_index=25, method="KNN", num=50)
+#' \code{
+#' data(iMIRAGE.datasets)
+#' imirage(GA.pcg, GA.mir, HS.pcg, gene_index="hsa-let-7c", method="KNN", num=50)
+#' imirage(GA.pcg, GA.mir, HS.pcg, gene_index=25, method="KNN", num=50)
+#' }
 #'
 #' @import randomForest
 #' @import FNN

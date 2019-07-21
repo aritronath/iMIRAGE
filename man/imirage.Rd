@@ -32,13 +32,16 @@ targets of the miRNA (from TargetScan) or use all genes as candidates. Default =
 RF (\link[randomForest]{randomForest}), KNN (\link[FNN]{knn.reg}) or SVM(\link[e1071]{svm})}
 }
 \value{
-imputed expression levels of the miRNA.
+a numeric vector with imputed expression levels of the miRNA
 }
 \description{
 Function to impute miRNA expression profile from protein coding expression dataset
 }
 \examples{
-imirage(train_pcg, train_mir, my_pcg, gene_index="ENSG00000228630", method="KNN", num=50)
-imirage(train_pcg, train_mir, my_pcg, gene_index=25, method="KNN", num=50)
+\\code{
+data(iMIRAGE.datasets)
+imirage(GA.pcg, GA.mir, HS.pcg, gene_index="hsa-let-7c", method="KNN", num=50)
+imirage(GA.pcg, GA.mir, HS.pcg, gene_index=25, method="KNN", num=50)
+}
 
 }
