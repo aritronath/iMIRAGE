@@ -35,7 +35,7 @@
 #' @import e1071
 #'
 #' @export imirage.cv
-imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=10, target="none", ...) {
+imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method="KNN", folds=10, target="none", ...) {
 
   if (mode(gene_index)!="numeric" & mode(gene_index)!="character") stop ("Error: miRNA not found in training dataset. Please check gene name or rownumber")
   if (mode(gene_index)=="numeric" & gene_index > ncol(train_mir))  stop ("Error: miRNA not found in training dataset. Please check ID or rownumber")
@@ -82,7 +82,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
       #randomForest
       imp.rf <- randomForest(x, y, ntree=250, ...)
       predict.y <- predict(imp.rf, testx)
-      r.rf <- cor.test(predict.y, actual.y, method="spearman")
+      r.rf <- suppressWarnings(cor.test(predict.y, actual.y, method="spearman"))
       rmse.rf <- sqrt(mean((actual.y-predict.y)^2))
       cv.res [k, 1:3] <- c(r.rf$estimate, r.rf$p.value, rmse.rf)
       next()
@@ -91,7 +91,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
     if (method=="KNN") {
       #knn regression
       knn.fit <- knn.reg(train = x, test = testx, y = y, k=50, ...)
-      r.knn <- cor.test(knn.fit$pred, actual.y, method="spearman")
+      r.knn <- suppressWarnings(cor.test(knn.fit$pred, actual.y, method="spearman"))
       rmse.knn <- sqrt(mean((actual.y - knn.fit$pred)^2))
       cv.res [k, 1:3] <- c(r.knn$estimate, r.knn$p.value, rmse.knn)
       next()
@@ -101,7 +101,7 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method, folds=
       #svm regression
       imp.svm <- svm(x, y, ...)
       predict.y <- predict(imp.svm, testx)
-      r.svm <- cor.test(predict.y, actual.y, method="spearman")
+      r.svm <- suppressWarnings(cor.test(predict.y, actual.y, method="spearman"))
       rmse.svm <- sqrt(mean((actual.y-predict.y)^2))
       cv.res [k, 1:3] <- c(r.svm$estimate, r.svm$p.value, rmse.svm)
       next()
