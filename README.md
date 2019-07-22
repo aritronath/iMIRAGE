@@ -1,9 +1,6 @@
-# iMIRAGE
-An R package to impute miRNA activity using protein-coding gene expression
+# iMIRAGE: An R package to impute miRNA activity using protein-coding gene expression
 ----
-
 # Introduction 
-
 The iMIRAGE package stands for imputed microRNA (miRNA) activity from gene expression. As the name suggests, the package imputes expression of miRNAs by constructing prediction models that only depend on the expression of levels of protein-coding genes (PCGs). In essence, iMIRAGE package can impute the miRNA profiles of samples where PCG expression data is availabe (for example, microarray or RNAseq) but do not contain miRNA expression. Using a *training* dataset containing both PCG and miRNA expression profiles, iMIRAGE trains prediction models using PCGs as features, and predicts miRNA expression in the dataset of interest. 
 
 The iMIRAGE package also provides tools to create an integrated workflow, to clean-up, pre-process and harmonize the expression datasets. In addition, the package provides an option of using miRNA-target gene pair information to construct the prediction models 
