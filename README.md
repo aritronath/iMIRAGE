@@ -1,0 +1,232 @@
+# iMIRAGE
+An R package to impute miRNA activity using protein-coding gene expression
+----
+
+# Introduction 
+
+The iMIRAGE package stands for imputed microRNA (miRNA) activity from gene expression. As the name suggests, the package imputes expression of miRNAs by constructing prediction models that only depend on the expression of levels of protein-coding genes (PCGs). In essence, iMIRAGE package can impute the miRNA profiles of samples where PCG expression data is availabe (for example, microarray or RNAseq) but do not contain miRNA expression. Using a *training* dataset containing both PCG and miRNA expression profiles, iMIRAGE trains prediction models using PCGs as features, and predicts miRNA expression in the dataset of interest. 
+
+The iMIRAGE package also provides tools to create an integrated workflow, to clean-up, pre-process and harmonize the expression datasets. In addition, the package provides an option of using miRNA-target gene pair information to construct the prediction models 
+
+## Download and installation 
+The iMIRAGE package for R can be downloaded from the [GitHub repository](https://github.com/aritronath/iMIRAGE):
+```
+#Download package from GitHub using devtools
+devtools::install_github("aritronath/iMIRAGE")
+```
+```{r results="hide"}
+#Load the package in R
+library(iMIRAGE)
+```
+
+## Whats included in this package? 
+The iMIRAGE package includes necessary functions for pre-processing and harmonization of expression datasets, miRNA expression imputation and cross-validation analyses. In addition, TargetScan miRNA-target gene pairs are 
+provided for constructing imputation models. The package also includes the example datasets that are used in this 
+vignette. 
+
+## Report issues 
+[Report bugs and issues here via GitHub](https://github.com/aritronath/iMIRAGE/issues)
+
+----
+
+# Quick Start Guide 
+In this example, we will use the two **indepedent** miRNA datasets that were derived from the Cancer Genome Atlas (TCGA) Breast Cancer (BRCA) project. These datasets are automatically available when the iMIRAGE package library is loaded. 
+
+###Datasets:
+1. Training: *GA.pcg*, *GA.mir*
+    + The prefix *GA* refers to TCGA breast invasive carcinoma (BRCA) samples for which miRNA mature strand expression were obtained using the Illumina Genome Analyzer system. 
+
+2. Test: *HS.pcg*, *HS.mir*
+    + The prefix *HS* refers to TCGA BRCA samples for which miRNA mature strand expression were obtained using the Illumina Hiseq system.
+
+    + The samples in the two datasets are mutually exclusive. The small subset included in these example datasets randomly selected
+
+    + Note: the complete TCGA BRCA HiSeq and GA datasets can be downloaded from the [XENA portal](https://xenabrowser.net/datapages/?cohort=TCGA%20Breast%20Cancer%20(BRCA)&removeHub=https%3A%2F%2Fxena.treehouse.gi.ucsc.edu%3A443)
+
+## Step 1: Match protein-coding genes (predictive features) in the training and test datasets with **match.gex** 
+```{r}
+# return a pair of matrices with matched columns (protein-coding genes that will be used as training features)
+
+temp <- match.gex(GA.pcg, HS.pcg)
+GA.pcg <- temp[[1]]
+HS.pcg <- temp[[2]]
+```
+
+## Step 2A: Perform 10-fold cross-validation analysis to determine the expected accuracy of imputing a miRNA of interest using the training datasets with **imirage.cv**
+```{r}
+#Use **imirage.cv** with the default parameters of using K-nearest neighbors as the prediction algorithm and using 50 protein-coding genes as training features
+
+CV.miRNA <- imirage.cv(train_pcg=GA.pcg, train_mir=GA.mir, gene_index="hsa-let-7c", method="KNN", target="none")
+
+#Print the accuracy metrics from each fold of the cross-validation analysis 
+print(CV.miRNA)
+
+#note: this example performs cross-validation analysis for 1 unique miRNA, hsa-let-7c. The name must match with one of the names in the train_mir object's column names
+```
+
+## Step 2B: Perform 10-fold cross-validation analysis to determine the expected imputation accuracy of entire miRNA dataset with **imirage.cv.loop**
+```{r results="hide"}
+#Perform cross-validation analysis over the entire training dataset 
+CV.full <- imirage.cv.loop(train_pcg = GA.pcg, train_mir = GA.mir, method = "KNN", target="none")
+
+#Plot some performance metrics from cross-validation analysis
+plot(CV.full[,1], -log10(CV.full[,2]), xlab="Spearman R", ylab="P-value (-log10)", pch=16, main="Cross-validation accuracy")
+abline(h=-log10(0.05), lty=3)
+```
+
+```{r}
+#Find out which miRNAs are imputed with good accuracy 
+colnames(GA.mir)[which(CV.full[,1] > 0.5)] #arbritarily, Spearman correlation > 0.5 
+
+colnames(GA.mir)[which(CV.full[,2] < 0.05)] #P-value < 0.05
+```
+
+## Step 3A: Impute expression of a single miRNA of interest in the test dataset 
+```{r}
+#Use **imirage** with default parameters
+Pred.miRNA <- imirage(train_pcg=GA.pcg, train_mir=GA.mir, my_pcg=HS.pcg , gene_index="hsa-let-7c", target="none")
+
+#Display the predicted miRNA expression values
+print(Pred.miRNA)
+
+#Compare the predicted miRNA expression values with measured expression 
+plot(Pred.miRNA, HS.mir[,"hsa-let-7c"], xlab="Predicted", ylab="Measured", main="hsa-let-7c imputation performance", pch=16)
+abline(lm(HS.mir[,"hsa-let-7c"] ~ Pred.miRNA), lty=3)
+```
+
+## Step 3B: Impute expression of all  miRNAs available in the training dataset
+```{r}
+#Create an empty matrix to store imputed expression 
+Pred.full <- matrix(data=NA, ncol=ncol(GA.mir), nrow=nrow(HS.pcg))
+
+#Execute a loop to impute each miRNA using the test protein coding dataset
+for (i in 1:ncol(GA.mir)) {
+  Pred.full[,i] <- imirage(train_pcg = GA.pcg, train_mir = GA.mir, my_pcg = HS.pcg, gene_index = i, method="KNN", target="none")
+}
+```
+
+Find out how well can we impute miRNA exression in the **independent** dataset
+```{r}
+#Obtain correlation coefficients between imputed and measured miRNA expression 
+Pred.Cors <- array(dim=ncol(GA.mir))
+for (i in 1:ncol(GA.mir)) {
+  Pred.Cors[i] <- cor(HS.mir[,i], Pred.full[,i], method="spearman")
+}
+
+#Plot imputation correlations in comparison to cross-validation results
+plot(Pred.Cors, CV.full[,1], xlab="Imputation accuracy", ylab="Cross-validation accuracy", main="Imputation performance", pch=16)
+```
+
+----
+
+# Detailed guide 
+
+## Required data
+1. Training data: protein-coding and miRNA expression data. In the package documentation, these datasets are reffered by their alias *train_pcg* and *train_mir* respectively
+    + Both datasets must be from the same samples
+    + High-quality miRNA expression data - from small RNAseq or miRNA arrays preferred 
+    + miRNA expression from regular RNAseq libraries are not reliable
+
+2. Protein-coding gene expression data fron the samples of interest. In the package documentation, this dataset is reffered by its alias *my_pcg*
+
+3. Organizing your data before use:
+    + Your data should be arranged as a *p x n* matrix, where *p* denotes samples in *rows* and *n* denotes genes/miRNA in *columns* 
+    + Row names should be names of the samples 
+    + Column names should be names of the gene/miRNA
+    + Gene IDs should be of the same type in the training and test datasets
+    + If you plan to use target gene pairs for constructing imputation models, the miRNA nomenclature should match between the training miRNA dataset and the miRNA-target gene pairs. Similarly, the protein-coding gene IDs in the training and test datasets should match with the type of ID used by the miRNA-target gene pair dataset 
+    + To convert gene IDs, use the R/Bioconductor package [biomaRt](https://bioconductor.org/packages/release/bioc/html/biomaRt.html)
+    
+    ```
+    #Short example on converting RefSeq mRNA IDs to ENSEMBL IDs using biomaRt
+    library(biomaRt)
+    ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
+    old.ids <- colnames(my_pcg) #RefSeq IDs
+    gene.annot <- getBM(attributes=c('refseq_mrna','ensembl_gene_id'), 
+                 filters = 'refseq_mrna', 
+                 values = as.character(old.ids), 
+                 mart = ensembl) 
+    #returns a dataframe with ENSEMBL IDs corresponding to supplied RefSeq mRNA IDs
+    ```
+    [See the biomaRt documentation for complete details and instructions](https://www.bioconductor.org/packages/devel/bioc/vignettes/biomaRt/inst/doc/biomaRt.html)
+    
+## Workflow
+We will use the unprocessed TCGA BRCA datasets to illustrate a typical workflow. The datset used in the subsequent examples can be downloaded from the Open Science Framework repository by following the following URL: https://osf.io/s5rbn/download
+
+After downloading the TCGA_BRCA_Datasets.RData file in the current working directory, load the contents using 
+```{r}
+load("TCGA_BRCA_Datasets.RData")
+```
+
+The following four matrices should appear after the object is loaded: ga.gex, ga.mirna, hiseq.gex, hiseq.mirna
+
+### 1. Filtering training datasets to remove gene or miRNAs that are not expressed in most samples (optional)
+We first remove gene or miRNAs that are not expressed in most samples, as these genes are likely not measured due to technical limitations and may not be reliable expression estimates. Ultimately, it is upto the user to decide whether they would like to include the sparse genes or miRNA in their analyses. 
+
+```{r}
+#Here, we filter the miRNA datasets to retain all miRNAs that are expressed above a level of 0 in atleast 75% of the samples 
+ga.mirna <- filter.exp(ga.mirna, cutoff=75, threshold = 0)
+hiseq.mirna <- filter.exp(ga.mirna, cutoff=75, threshold = 0)
+```
+
+
+### 2. Match training and test protein-coding expression matrices (required)
+Here, we match the two protein-coding expression matrices for subsequent processing
+```{r}
+#We also will keep the unprocessed hiseq.gex.1 and ga.gex.1 datasets for subsquent comparisons
+temp <- match.gex(hiseq.gex, ga.gex)
+hiseq.gex.1 <- temp[[1]]
+ga.gex.1 <- temp[[2]]
+
+#For subsquent prediction analyses, we will also select miRNAs are common to both datasets
+temp <- match.gex(ga.mirna, hiseq.mirna)
+ga.mirna.1 <- temp[[1]]
+hiseq.mirna.1 <- temp[[2]]
+
+```
+
+### 3. Pre-process training and test datasets (optional, recommended)
+In this step, we process the training and test datasets to make sure they are transformed, normalized and standardized before proceeding with further analysis. These steps tend to have a significant impact on subsquent analyses. Generally, the user should determine whether their data has been transformed (usually, log2 or log2(x+1)) from the original source. In most cases, microarray datasets in public domain, such as NCBI GEO, are normalized and log transformed. However, several RNAseq datasets and avaliable in the form of RSEM/RPKM/FPKM/TPM prior to transformation and normalization. In these instances, it is adisable to at the very least perform log transformation and upper-quantile normalization. 
+
+In addition, the variance filter removes genes with zero variance that will offer no predictive power. Finally, the data is scaled to a mean = 0 and standard deviation = 1. These are bare-minimum standardization techniques which can be skipped if the user has already pre-processed their data using other approaches. 
+
+```{r}
+ga.gex.2 <- pre.process(ga.gex.1, log = TRUE, var.filter = TRUE, UQ = TRUE, std = TRUE)
+hiseq.gex.2 <- pre.process(hiseq.gex.1, log = TRUE, var.filter = TRUE, UQ = TRUE, std = TRUE)
+
+#This is how the data looks before and after pre.processing (showing the first 10 samples from each dataset)
+par(mfrow=c(2,2), cex=0.75)
+boxplot(t(ga.gex.1[1:10,]), main="GA - raw expression")
+boxplot(t(ga.gex.2[1:10,]), main="GA - processed expression")
+boxplot(t(hiseq.gex.1[1:10,]), main="Hiseq - raw expression")
+boxplot(t(hiseq.gex.2[1:10,]), main="Hiseq - processed expression")
+
+```
+
+### 4. Performing cross-validation to obtain accuracy metrics and imputing in test dataset
+Here, we will first find out which miRNAs can be imputed with good accuracy using the GA dataset as our training dataset. The **imirage.cv** function performs a 10-fold cross-validation analysis for a single miRNA specified by the *gene_index* argument, as shown in the quick start guide above. In addition, the **imirage.cv.loop** wrapper can be used to perform the cross-validation analysis on the entire traininge miRNA dataset. 
+
+The cross-validation analysis can be performed using one of the three methods: K-nearest neighbor regression (KNN), Random Forests (RF) or Support Vector Machines (SVM). These can be specified using the *method* argument. 
+
+For further details on the arguments that can be passed on the machine-learning methods, please see the documentation for [randomForest](https://cran.r-project.org/web/packages/randomForest/index.html), [e0171](https://cran.r-project.org/web/packages/e1071/index.html) and [FNN](https://cran.r-project.org/web/packages/FNN/index.html) packages. 
+
+By default, the number of training features that are used by each method are set at 50. This can adjusted by the user using the *num* argument to achieve a balance between desired imputation accuracy and computational costs. 
+
+Additionally, the "K"" or number of cross-validation iterations can be set using *folds*, which set at 10 by default. 
+
+Here, we perform a 10-fold cross-validation analysis using the entire GA training datasets using KNN method. We perform the analysis with both the processed and unprocessed GA protein-coding data for comparison 
+
+``` {r results="hide"}
+#Unprocessed training data
+CV.ga.gex1 <- imirage.cv.loop(train_pcg = ga.gex.1, train_mir = ga.mirna.1, method = "KNN", target="none")
+
+#Processed training data
+CV.ga.gex2 <- imirage.cv.loop(train_pcg = ga.gex.2, train_mir = ga.mirna.1, method = "KNN", target="none")
+
+#Comparison of imputation accuracies between raw and processed data
+boxplot(CV.ga.gex1[,1], CV.ga.gex2[,1], names=c("Raw", "Processed"), main="Imputation accuracy")
+```
+
+Subsequently, the user can either select the miRNAs with good performance metrics in cross-validation analysis or perform the imputation using the full training dataset. Generally, poor cross-validation metrics are a good indicator that the miRNA can be safely excluded from the prediction analysis in the independent test dataset. 
+
+----
