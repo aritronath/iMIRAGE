@@ -247,4 +247,9 @@ boxplot(CV.ga.gex1[,1], CV.ga.gex2[,1], names=c("Raw", "Processed"), main="Imput
 Subsequently, the user can either select the miRNAs with good performance metrics in cross-validation analysis or perform the imputation using the full training dataset. Generally, poor cross-validation metrics are a good indicator that the miRNA can be safely excluded from the prediction analysis in the independent test dataset. 
 
 ----
+
+### Session Info
         
+```{r}
+sessionInfo()
+```

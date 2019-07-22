@@ -112,3 +112,6 @@ CV.ga.gex2 <- imirage.cv.loop(train_pcg = ga.gex.2, train_mir = ga.mirna.1, meth
 #Comparison of imputation accuracies between raw and processed data
 boxplot(CV.ga.gex1[,1], CV.ga.gex2[,1], names=c("Raw", "Processed"), main="Imputation accuracy")
 
+## ------------------------------------------------------------------------
+sessionInfo()
+
