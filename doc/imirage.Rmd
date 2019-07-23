@@ -183,19 +183,20 @@ iMIRAGE assumes that not all protein-coding genes are meaningful for constructin
 We will use the unprocessed TCGA BRCA data sets to illustrate a typical workflow. The data set used in the subsequent examples can be downloaded from the Open Science Framework repository by following the following URL: https://osf.io/s5rbn/download
 
 After downloading the TCGA_BRCA_Datasets.RData file in the current working directory, load the contents using 
-```{r}
+```{r eval=FALSE}
 load("TCGA_BRCA_Datasets.RData")
 ```
 
 The following four matrices should appear after the object is loaded: ga.gex, ga.mirna, hiseq.gex, hiseq.mirna
 
 ### 1. Filtering training datasets using `filter.exp`to remove gene or miRNAs that are not expressed in most samples using (optional)
-We first remove gene or miRNAs that are not expressed in most samples, as these genes are likely not measured due to technical limitations and may not be reliable expression estimates. Ultimately, it is up to the user to decide whether they would like to include the sparse genes or miRNA in their analyses. 
+We first remove gene or miRNAs that are not expressed in most samples, as these genes are likely not measured due to technical limitations and may not be reliable expression estimates. Ultimately, it is up to the user to decide whether they would like to include the sparse genes or miRNA in their analyses.
 
 ```{r}
-#Here, we filter the miRNA datasets to retain all miRNAs that are expressed above a level of 0 in atleast 75% of the samples 
+#Here, we filter the miRNA datasets to retain all miRNAs that are expressed above a level of 0 in atleast 75% of the samples
 ga.mirna <- filter.exp(ga.mirna, cutoff=75, threshold = 0)
-hiseq.mirna <- filter.exp(ga.mirna, cutoff=75, threshold = 0)
+hiseq.mirna <- filter.exp(hiseq.mirna, cutoff=75, threshold = 0)
+
 ```
 
 
@@ -250,12 +251,20 @@ Here, we perform a 10-fold cross-validation analysis using the entire GA trainin
 ``` {r results="hide"}
 #Unprocessed training data
 CV.ga.gex1 <- imirage.cv.loop(train_pcg = ga.gex.1, train_mir = ga.mirna.1, method = "KNN", target="none")
-
 #Processed training data
 CV.ga.gex2 <- imirage.cv.loop(train_pcg = ga.gex.2, train_mir = ga.mirna.1, method = "KNN", target="none")
 
+#Unprocessed training data
+CV.hs.gex1 <- imirage.cv.loop(train_pcg = hiseq.gex.1, train_mir = hiseq.mirna.1, method = "KNN", target="none")
+#Processed training data
+CV.hs.gex2 <- imirage.cv.loop(train_pcg = hiseq.gex.2, train_mir = hiseq.mirna.1, method = "KNN", target="none")
+
+
 #Comparison of imputation accuracies between raw and processed data
-boxplot(CV.ga.gex1[,1], CV.ga.gex2[,1], names=c("Raw", "Processed"), main="Imputation accuracy")
+boxplot(CV.ga.gex1[,1], CV.ga.gex2[,1], names=c("Raw", "Processed"), main="GA CV accuracy")
+
+boxplot(CV.hs.gex1[,1], CV.hs.gex2[,1], names=c("Raw", "Processed"), main="Hiseq CV accuracy")
+
 ```
 
 Subsequently, the user can either select the miRNAs with good performance metrics in cross-validation analysis or perform the imputation using the full training data set with `imirage`. Generally, poor cross-validation metrics are a good indicator that the miRNA can be safely excluded from the prediction analysis in the independent test data set. 

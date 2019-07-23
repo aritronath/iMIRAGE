@@ -15,6 +15,5 @@ squared error from cross-validation analysis
 }
 \description{
 This function returns useful information by organizing the output from cross-validation analysis.
-Used internatlly by \link[iMIRAGE]{imirage.cv.loop} and can also be used to processing output from
-\link[iMIRAGE]{imirage.cv}
+Used internally by \link[iMIRAGE]{imirage.cv.loop}
 }

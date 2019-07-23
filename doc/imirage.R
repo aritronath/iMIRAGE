@@ -70,13 +70,14 @@ for (i in 1:ncol(GA.mir)) {
 #Plot imputation correlations in comparison to cross-validation results
 plot(Pred.Cors, CV.full[,1], xlab="Imputation accuracy", ylab="Cross-validation accuracy", main="Imputation performance", pch=16)
 
-## ------------------------------------------------------------------------
-load("TCGA_BRCA_Datasets.RData")
+## ----eval=FALSE----------------------------------------------------------
+#  load("TCGA_BRCA_Datasets.RData")
 
 ## ------------------------------------------------------------------------
-#Here, we filter the miRNA datasets to retain all miRNAs that are expressed above a level of 0 in atleast 75% of the samples 
+#Here, we filter the miRNA datasets to retain all miRNAs that are expressed above a level of 0 in atleast 75% of the samples
 ga.mirna <- filter.exp(ga.mirna, cutoff=75, threshold = 0)
-hiseq.mirna <- filter.exp(ga.mirna, cutoff=75, threshold = 0)
+hiseq.mirna <- filter.exp(hiseq.mirna, cutoff=75, threshold = 0)
+
 
 ## ------------------------------------------------------------------------
 #We also will keep the unprocessed hiseq.gex.1 and ga.gex.1 datasets for subsquent comparisons
@@ -105,12 +106,20 @@ boxplot(t(hiseq.gex.2[1:10,]), main="Hiseq - processed expression")
 ## ----results="hide"------------------------------------------------------
 #Unprocessed training data
 CV.ga.gex1 <- imirage.cv.loop(train_pcg = ga.gex.1, train_mir = ga.mirna.1, method = "KNN", target="none")
-
 #Processed training data
 CV.ga.gex2 <- imirage.cv.loop(train_pcg = ga.gex.2, train_mir = ga.mirna.1, method = "KNN", target="none")
 
+#Unprocessed training data
+CV.hs.gex1 <- imirage.cv.loop(train_pcg = hiseq.gex.1, train_mir = hiseq.mirna.1, method = "KNN", target="none")
+#Processed training data
+CV.hs.gex2 <- imirage.cv.loop(train_pcg = hiseq.gex.2, train_mir = hiseq.mirna.1, method = "KNN", target="none")
+
+
 #Comparison of imputation accuracies between raw and processed data
-boxplot(CV.ga.gex1[,1], CV.ga.gex2[,1], names=c("Raw", "Processed"), main="Imputation accuracy")
+boxplot(CV.ga.gex1[,1], CV.ga.gex2[,1], names=c("Raw", "Processed"), main="GA CV accuracy")
+
+boxplot(CV.hs.gex1[,1], CV.hs.gex2[,1], names=c("Raw", "Processed"), main="Hiseq CV accuracy")
+
 
 ## ------------------------------------------------------------------------
 sessionInfo()
