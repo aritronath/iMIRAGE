@@ -4,7 +4,7 @@
 \alias{imirage.cv}
 \title{Cross validation function for iMIRAGE imputation accuracy}
 \usage{
-imirage.cv(train_pcg, train_mir, gene_index, num = 50, method,
+imirage.cv(train_pcg, train_mir, gene_index, num = 50, method = "KNN",
   folds = 10, target = "none", ...)
 }
 \arguments{
