@@ -1,8 +1,29 @@
+---
+title: "iMIRAGE Vignette"
+author: "Aritro Nath"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{iMIRAGE Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=7, fig.height=6
+)
+```
+
+----
+
 # Introduction 
 
-**iMIRAGE** stands for *imputed microRNA (miRNA) activity from gene expression*. As the name suggests, the package imputes expression of miRNAs by constructing prediction models that only depend on the expression levels of protein-coding genes. In essence, iMIRAGE package can impute the miRNA profiles of samples where protein-coding expression data is availabe (for example,from or microarray or RNAseq), but do not contain reliable miRNA expression. By utilizing a *training* dataset containing both protein-coding and miRNA expression profiles, iMIRAGE trains predicts miRNA expression in the *test* dataset of interest. 
+**iMIRAGE** stands for *imputed microRNA (miRNA) activity from gene expression*. As the name suggests, the package imputes expression of miRNAs by constructing prediction models that only depend on the expression levels of protein-coding genes. In essence, iMIRAGE package can impute the miRNA profiles of samples where protein-coding expression data is available (for example,from or microarray or RNA-seq), but do not contain reliable miRNA expression. By utilizing a *training* data set containing both protein-coding and miRNA expression profiles, iMIRAGE trains predicts miRNA expression in the *test* data set of interest. 
 
-The iMIRAGE package also provides tools to create an integrated workflow, to harmonize, clean-up, normalize and standardize the expression datasets. In addition, the package provides an option of using miRNA-target gene pair information to construct the prediction models 
+The iMIRAGE package also provides tools to create an integrated workflow, to harmonize, clean-up, normalize and standardize the expression data sets. In addition, the package provides an option of using miRNA-target gene pair information to construct the prediction models 
 
 ## Download and installation 
 The iMIRAGE package for R can be downloaded from the [GitHub repository](https://github.com/aritronath/iMIRAGE):
@@ -16,8 +37,8 @@ library(iMIRAGE)
 ```
 
 ## Whats included in this package? 
-The iMIRAGE package includes necessary functions for pre-processing and harmonization of expression datasets, miRNA expression imputation and cross-validation analyses. In addition, TargetScan miRNA-target gene pairs are 
-provided for constructing imputation models. The package also includes the example datasets that are used in this 
+The iMIRAGE package includes necessary functions for pre-processing and harmonization of expression data sets, miRNA expression imputation and cross-validation analyses. In addition, TargetScan miRNA-target gene pairs are 
+provided for constructing imputation models. The package also includes the example data sets that are used in this 
 vignette. 
 
 ## Report issues 
@@ -26,7 +47,7 @@ vignette.
 ----
 
 # Quick Start Guide 
-In this example, we will use the two **indepedent** miRNA datasets that were derived from the Cancer Genome Atlas (TCGA) Breast Cancer (BRCA) project. These datasets are automatically available when the iMIRAGE package library is loaded. 
+In this example, we will use the two **indepedent** miRNA data sets that were derived from the Cancer Genome Atlas (TCGA) Breast Cancer (BRCA) project. These data sets are automatically available when the iMIRAGE package library is loaded. 
 
 ###Datasets:
 1. Training: *GA.pcg*, *GA.mir*
@@ -35,9 +56,9 @@ In this example, we will use the two **indepedent** miRNA datasets that were der
 2. Test: *HS.pcg*, *HS.mir*
     + The prefix *HS* refers to TCGA BRCA samples for which miRNA mature strand expression were obtained using the Illumina Hiseq system.
 
-    + The samples in the two datasets are mutually exclusive. The small subset included in these example datasets were randomly selected
+    + The samples in the two data sets are mutually exclusive. The small subset included in these example data sets were randomly selected
 
-    + Note: the complete TCGA BRCA HiSeq and GA datasets can be downloaded from the [XENA portal](https://xenabrowser.net/datapages/?cohort=TCGA%20Breast%20Cancer%20(BRCA)&removeHub=https%3A%2F%2Fxena.treehouse.gi.ucsc.edu%3A443)
+    + Note: the complete TCGA BRCA HiSeq and GA data sets can be downloaded from the [XENA portal](https://xenabrowser.net/datapages/?cohort=TCGA%20Breast%20Cancer%20(BRCA)&removeHub=https%3A%2F%2Fxena.treehouse.gi.ucsc.edu%3A443)
 
 ## Step 1: Match protein-coding genes (predictive features) in the training and test datasets with `match.gex` 
 ```{r}
@@ -101,7 +122,7 @@ for (i in 1:ncol(GA.mir)) {
 }
 ```
 
-Find out how well can we impute miRNA exression in the **independent** dataset
+Find out how well can we impute miRNA expression in the **independent** data set
 ```{r}
 #Obtain correlation coefficients between imputed and measured miRNA expression 
 Pred.Cors <- array(dim=ncol(GA.mir))
@@ -118,32 +139,32 @@ plot(Pred.Cors, CV.full[,1], xlab="Imputation accuracy", ylab="Cross-validation 
 # Detailed guide 
 
 ## Background
-The principle behind iMIRAGE can be explained in a simiplified form by stating the problem in the form of a linear model. Let us assume the user wants to obtain miRNA expression using their protein-coding dataset which we will all *test*. To impute the miRNA expression using the *test* protein-coding dataset, we first determine the mathematical relation between the expression of a set of miRNAs *Y* with the set of protein-coding gene expression *X* of the *training* dataset, where *p* indicates the number of protein-coding genes used in the model. This number can range anywhere from 1 to *P*, where, *P = total number of protein-coding genes* available in both the training and test datasets. 
+The principle behind iMIRAGE can be explained in a simplified form by stating the problem in the form of a linear model. Let us assume the user wants to obtain miRNA expression using their protein-coding data set which we will all *test*. To impute the miRNA expression using the *test* protein-coding data set, we first determine the mathematical relation between the expression of a set of miRNAs *Y* with the set of protein-coding gene expression *X* of the *training* data set, where *p* indicates the number of protein-coding genes used in the model. This number can range anywhere from 1 to *P*, where, *P = total number of protein-coding genes* available in both the training and test data sets. 
 
 $Y^{Training} = \sum_{i=1}^{p} \beta X_{i}^{Training} + \epsilon$ 
 
-The objective of iMIRAGE is to determine $\beta$ so that it can be harnessed to predict the expression of miRNA *Y* by applying the model to the *test* protein-coding dataset:  
+The objective of iMIRAGE is to determine $\beta$ so that it can be harnessed to predict the expression of miRNA *Y* by applying the model to the *test* protein-coding data set:  
 
 $Y^{Predicted} = \sum_{i=1}^{p} \beta X_{i}^{Test}$
 
-(Note that the machine-learning algorithms that are used iMIRAGE are not necessatily based on the assumption of linearity. This is only for simplified illustration purposes)
+(Note that the machine-learning algorithms that are used iMIRAGE are not necessarily based on the assumption of linearity. This is only for simplified illustration purposes)
 
-iMIRAGE assumes that not all protein-coding genes are meaningful for constructing imputation models. Therefore, it suggests using a subset of informative protein-coding genes for each miRNA. These informative features are automatically determined by calculating the correlation between the expression of all features with miRNA expression in the training datasets. Then, only a user-specified subset of the top correlated features are retained for constructing the models (by default 50). 
+iMIRAGE assumes that not all protein-coding genes are meaningful for constructing imputation models. Therefore, it suggests using a subset of informative protein-coding genes for each miRNA. These informative features are automatically determined by calculating the correlation between the expression of all features with miRNA expression in the training data sets. Then, only a user-specified subset of the top correlated features are retained for constructing the models (by default 50). 
 
 ## Required data
-1. Training data: protein-coding and miRNA expression data. In the package documentation, these datasets are reffered by their alias *train_pcg* and *train_mir* respectively
-    + Both datasets must be from the same samples
-    + High-quality miRNA expression data - from small RNAseq or miRNA arrays preferred 
-    + miRNA expression from regular RNAseq libraries are not reliable
+1. Training data: protein-coding and miRNA expression data. In the package documentation, these data sets are referred by their alias *train_pcg* and *train_mir* respectively
+    + Both data sets must be from the same samples
+    + High-quality miRNA expression data - from small RNA-seq or miRNA arrays preferred 
+    + miRNA expression from regular RNA-seq libraries are not reliable
 
-2. Protein-coding gene expression data fron the samples of interest. In the package documentation, this dataset is reffered by its alias *my_pcg*
+2. Protein-coding gene expression data from the samples of interest. In the package documentation, this data set is referred by its alias *my_pcg*
 
 3. Organizing your data before use:
     + Your data should be arranged as a *n x p* matrix, where *n* denotes samples in *rows* and *p* denotes genes/miRNA in *columns* 
     + Row names should be names of the samples 
     + Column names should be names of the gene/miRNA
-    + Gene IDs should be of the same type in the training and test datasets
-    + If you plan to use target gene pairs for constructing imputation models, the miRNA nomenclature should match between the training miRNA dataset and the miRNA-target gene pairs. Similarly, the protein-coding gene IDs in the training and test datasets should match with the type of ID used by the miRNA-target gene pair dataset 
+    + Gene IDs should be of the same type in the training and test data sets
+    + If you plan to use target gene pairs for constructing imputation models, the miRNA nomenclature should match between the training miRNA data set and the miRNA-target gene pairs. Similarly, the protein-coding gene IDs in the training and test data sets should match with the type of ID used by the miRNA-target gene pair data set 
     + To convert gene IDs, use the R/Bioconductor package [biomaRt](https://bioconductor.org/packages/release/bioc/html/biomaRt.html)
     
     ```
@@ -160,7 +181,7 @@ iMIRAGE assumes that not all protein-coding genes are meaningful for constructin
     [See the biomaRt documentation for complete details and instructions](https://www.bioconductor.org/packages/devel/bioc/vignettes/biomaRt/inst/doc/biomaRt.html)
     
 ## Workflow
-We will use the unprocessed TCGA BRCA datasets to illustrate a typical workflow. The datset used in the subsequent examples can be downloaded from the Open Science Framework repository by following the following URL: https://osf.io/s5rbn/download
+We will use the unprocessed TCGA BRCA data sets to illustrate a typical workflow. The data set used in the subsequent examples can be downloaded from the Open Science Framework repository by following the following URL: https://osf.io/s5rbn/download
 
 After downloading the TCGA_BRCA_Datasets.RData file in the current working directory, load the contents using 
 ```{r}
@@ -170,7 +191,7 @@ load("TCGA_BRCA_Datasets.RData")
 The following four matrices should appear after the object is loaded: ga.gex, ga.mirna, hiseq.gex, hiseq.mirna
 
 ### 1. Filtering training datasets using `filter.exp`to remove gene or miRNAs that are not expressed in most samples using (optional)
-We first remove gene or miRNAs that are not expressed in most samples, as these genes are likely not measured due to technical limitations and may not be reliable expression estimates. Ultimately, it is upto the user to decide whether they would like to include the sparse genes or miRNA in their analyses. 
+We first remove gene or miRNAs that are not expressed in most samples, as these genes are likely not measured due to technical limitations and may not be reliable expression estimates. Ultimately, it is up to the user to decide whether they would like to include the sparse genes or miRNA in their analyses. 
 
 ```{r}
 #Here, we filter the miRNA datasets to retain all miRNAs that are expressed above a level of 0 in atleast 75% of the samples 
@@ -195,7 +216,9 @@ hiseq.mirna.1 <- temp[[2]]
 ```
 
 ### 3. `pre.process` training and test datasets (optional, recommended)
-In this step, we process the training and test datasets using `pre.process` to make sure they are transformed, normalized and standardized before proceeding with further analysis. These steps tend to have a significant impact on subsquent analyses. Generally, the user should determine whether their data has been transformed (usually, log2 or log2(x+1)) from the original source. In most cases, microarray datasets in public domain, such as NCBI GEO, are normalized and log transformed. However, several RNAseq datasets and avaliable in the form of RSEM/RPKM/FPKM/TPM prior to transformation and normalization. In these instances, it is adisable to at the very least perform log transformation and upper-quantile normalization. 
+In this step, we process the training and test data sets using `pre.process` to make sure they are transformed, normalized and standardized before proceeding with further analysis. These steps tend to have a significant impact on subsequent analyses. 
+
+Generally, the user should determine whether their data has been transformed ($\log2$ or $\log2(x+1)$) or normalized from the original source. In most cases, microarray data sets in public domain, such as [NCBI GEO](https://www.ncbi.nlm.nih.gov/geo/) or [ArrayExpress](https://www.ebi.ac.uk/arrayexpress/), are already transformed and normalized. However, several RNA-seq data sets may be available prior to transformation and normalization. In these instances, it is advisable to perform log transformation and upper-quantile normalization prior to use in the workflow.  
 
 In addition, the variance filter removes genes with zero variance that will offer no predictive power. Finally, the data is scaled to a mean = 0 and standard deviation = 1. These are bare-minimum standardization techniques which can be skipped if the user has already pre-processed their data using other approaches. 
 
@@ -213,7 +236,7 @@ boxplot(t(hiseq.gex.2[1:10,]), main="Hiseq - processed expression")
 ```
 
 ### 4. Performing cross-validation to obtain accuracy metrics and imputing in test dataset
-Here, we will first find out which miRNAs can be imputed with good accuracy using the GA dataset as our training dataset. The `imirage.cv` function performs a 10-fold cross-validation analysis for a single miRNA specified by the *gene_index* argument, as shown in the quick start guide above. In addition, the `imirage.cv.loop` wrapper can be used to perform the cross-validation analysis on the entire traininge miRNA dataset. 
+Here, we will first find out which miRNAs can be imputed with good accuracy using the GA data set as our training data set. The `imirage.cv` function performs a 10-fold cross-validation analysis for a single miRNA specified by the *gene_index* argument, as shown in the quick start guide above. In addition, the `imirage.cv.loop` wrapper can be used to perform the cross-validation analysis on the entire training miRNA data set. 
 
 The cross-validation analysis can be performed using one of the three methods: K-nearest neighbor regression (KNN), Random Forests (RF) or Support Vector Machines (SVM). These can be specified using the *method* argument. 
 
@@ -223,7 +246,7 @@ By default, the number of training features that are used by each method are set
 
 Additionally, the "K"" or number of cross-validation iterations can be set using *folds*, which set at 10 by default. 
 
-Here, we perform a 10-fold cross-validation analysis using the entire GA training datasets using KNN method. We perform the analysis with both the processed and unprocessed GA protein-coding data for comparison 
+Here, we perform a 10-fold cross-validation analysis using the entire GA training data sets using KNN method. We perform the analysis with both the processed and unprocessed GA protein-coding data for comparison 
 
 ``` {r results="hide"}
 #Unprocessed training data
@@ -236,7 +259,7 @@ CV.ga.gex2 <- imirage.cv.loop(train_pcg = ga.gex.2, train_mir = ga.mirna.1, meth
 boxplot(CV.ga.gex1[,1], CV.ga.gex2[,1], names=c("Raw", "Processed"), main="Imputation accuracy")
 ```
 
-Subsequently, the user can either select the miRNAs with good performance metrics in cross-validation analysis or perform the imputation using the full training dataset with `imirage`. Generally, poor cross-validation metrics are a good indicator that the miRNA can be safely excluded from the prediction analysis in the independent test dataset. 
+Subsequently, the user can either select the miRNAs with good performance metrics in cross-validation analysis or perform the imputation using the full training data set with `imirage`. Generally, poor cross-validation metrics are a good indicator that the miRNA can be safely excluded from the prediction analysis in the independent test data set. 
 
 ----
 
