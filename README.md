@@ -1,6 +1,6 @@
 # Introduction 
 
-**iMIRAGE** stands for *imputed microRNA (miRNA) activity from gene expression*. As the name suggests, the package imputes expression of miRNAs by constructing prediction models that only depend on the expression levels of protein-coding genes. In essence, iMIRAGE package can impute the miRNA profiles of samples where protein-coding expression data is available (for example,from or microarray or RNA-seq), but do not contain reliable miRNA expression. By utilizing a *training* data set containing both protein-coding and miRNA expression profiles, iMIRAGE trains predicts miRNA expression in the *test* data set of interest. 
+**iMIRAGE** stands for *imputed microRNA (miRNA) activity from gene expression*. As the name suggests, the package imputes expression of miRNAs by constructing prediction models that only depend on the expression levels of protein-coding genes. In essence, iMIRAGE package can impute the miRNA profiles of samples where protein-coding expression data is available (for example,from or microarray or RNA-seq), but do not contain reliable miRNA expression. By utilizing a *training* data set containing both protein-coding and miRNA expression profiles, iMIRAGE trains predicts miRNA expression in the *independent* *(test)* data set of interest. 
 
 The iMIRAGE package also provides tools to create an integrated workflow, to harmonize, clean-up, normalize and standardize the expression data sets. In addition, the package provides an option of using miRNA-target gene pair information to construct the prediction models 
 
@@ -17,8 +17,7 @@ library(iMIRAGE)
 
 ## Whats included in this package? 
 The iMIRAGE package includes necessary functions for pre-processing and harmonization of expression data sets, miRNA expression imputation and cross-validation analyses. In addition, TargetScan miRNA-target gene pairs are 
-provided for constructing imputation models. The package also includes the example data sets that are used in this 
-vignette. 
+provided for constructing imputation models. The package also includes the example data sets that are used in this vignette. 
 
 ## Report issues 
 [Report bugs and issues here via GitHub](https://github.com/aritronath/iMIRAGE/issues)
@@ -247,3 +246,4 @@ Subsequently, the user can either select the miRNAs with good performance metric
 ```{r}
 sessionInfo()
 ```
+
