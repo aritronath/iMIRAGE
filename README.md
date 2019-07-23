@@ -1,24 +1,3 @@
----
-title: "iMIRAGE Vignette"
-author: "Aritro Nath"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{iMIRAGE Vignette}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.width=7, fig.height=6
-)
-```
-
-----
-
 # Introduction 
 
 **iMIRAGE** stands for *imputed microRNA (miRNA) activity from gene expression*. As the name suggests, the package imputes expression of miRNAs by constructing prediction models that only depend on the expression levels of protein-coding genes. In essence, iMIRAGE package can impute the miRNA profiles of samples where protein-coding expression data is available (for example,from or microarray or RNA-seq), but do not contain reliable miRNA expression. By utilizing a *training* data set containing both protein-coding and miRNA expression profiles, iMIRAGE trains predicts miRNA expression in the *test* data set of interest. 
