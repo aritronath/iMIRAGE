@@ -168,17 +168,17 @@ CV.miRNA &lt;-<span class="st"> </span><span class="kw"><a href="../reference/im
 
 <span class="co">#Print the accuracy metrics from each fold of the cross-validation analysis </span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(CV.miRNA)
-<span class="co">#&gt;             PCC      P-Value      RMSE</span>
-<span class="co">#&gt;  [1,] 0.7130634 4.683273e-06 1434.4456</span>
-<span class="co">#&gt;  [2,] 0.7430620 1.950288e-08 1549.8338</span>
-<span class="co">#&gt;  [3,] 0.6547275 1.253786e-04  902.9894</span>
-<span class="co">#&gt;  [4,] 0.6062291 4.984929e-04 2607.7554</span>
-<span class="co">#&gt;  [5,] 0.6990991 4.339253e-06 1479.0367</span>
-<span class="co">#&gt;  [6,] 0.7923077 4.641090e-06 1647.9684</span>
-<span class="co">#&gt;  [7,] 0.7275261 3.503775e-07 1344.3944</span>
-<span class="co">#&gt;  [8,] 0.6278226 2.146934e-04 2400.9588</span>
-<span class="co">#&gt;  [9,] 0.7321739 7.436477e-05 2390.2325</span>
-<span class="co">#&gt; [10,] 0.8422460 2.692730e-07 1429.4990</span>
+<span class="co">#&gt;             PCC      P-Value     RMSE</span>
+<span class="co">#&gt;  [1,] 0.6052419 4.045653e-04 2031.535</span>
+<span class="co">#&gt;  [2,] 0.7782609 1.210438e-05 1812.608</span>
+<span class="co">#&gt;  [3,] 0.7186645 2.755435e-05 1429.361</span>
+<span class="co">#&gt;  [4,] 0.7427044 1.629176e-06 1707.036</span>
+<span class="co">#&gt;  [5,] 0.6443850 7.617337e-05 1611.911</span>
+<span class="co">#&gt;  [6,] 0.6974416 3.021568e-05 1552.627</span>
+<span class="co">#&gt;  [7,] 0.7457256 1.374350e-07 1328.483</span>
+<span class="co">#&gt;  [8,] 0.7255696 7.943030e-09 2291.061</span>
+<span class="co">#&gt;  [9,] 0.7464076 5.097518e-06 1875.509</span>
+<span class="co">#&gt; [10,] 0.8435447 1.663083e-07 1424.721</span>
 
 <span class="co">#note: this example performs cross-validation analysis for 1 unique miRNA, hsa-let-7c. The name must match with one of the names in the train_mir object's column names</span></code></pre></div>
 </div>
@@ -196,15 +196,16 @@ CV.full &lt;-<span class="st"> </span><span class="kw"><a href="../reference/imi
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(GA.mir)[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(CV.full[,<span class="dv">1</span>] <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>)] <span class="co">#arbritarily, Spearman correlation &gt; 0.5 </span>
 <span class="co">#&gt;  [1] "hsa-let-7c"   "hsa-mir-100"  "hsa-mir-10b"  "hsa-mir-1301"</span>
 <span class="co">#&gt;  [5] "hsa-mir-1307" "hsa-mir-130b" "hsa-mir-141"  "hsa-mir-150" </span>
-<span class="co">#&gt;  [9] "hsa-mir-17"   "hsa-mir-18a"  "hsa-mir-210"  "hsa-mir-301a"</span>
-<span class="co">#&gt; [13] "hsa-mir-3677" "hsa-mir-4772" "hsa-mir-99a"</span>
+<span class="co">#&gt;  [9] "hsa-mir-155"  "hsa-mir-17"   "hsa-mir-18a"  "hsa-mir-20a" </span>
+<span class="co">#&gt; [13] "hsa-mir-210"  "hsa-mir-301a" "hsa-mir-3677" "hsa-mir-4772"</span>
+<span class="co">#&gt; [17] "hsa-mir-99a"</span>
 
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(GA.mir)[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(CV.full[,<span class="dv">2</span>] <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)] <span class="co">#P-value &lt; 0.05</span>
 <span class="co">#&gt;  [1] "hsa-let-7c"   "hsa-mir-100"  "hsa-mir-10b"  "hsa-mir-1301"</span>
-<span class="co">#&gt;  [5] "hsa-mir-1307" "hsa-mir-130b" "hsa-mir-141"  "hsa-mir-146a"</span>
-<span class="co">#&gt;  [9] "hsa-mir-150"  "hsa-mir-155"  "hsa-mir-17"   "hsa-mir-18a" </span>
-<span class="co">#&gt; [13] "hsa-mir-210"  "hsa-mir-301a" "hsa-mir-3677" "hsa-mir-4772"</span>
-<span class="co">#&gt; [17] "hsa-mir-6510" "hsa-mir-99a"</span></code></pre></div>
+<span class="co">#&gt;  [5] "hsa-mir-1307" "hsa-mir-130b" "hsa-mir-141"  "hsa-mir-150" </span>
+<span class="co">#&gt;  [9] "hsa-mir-155"  "hsa-mir-17"   "hsa-mir-18a"  "hsa-mir-190b"</span>
+<span class="co">#&gt; [13] "hsa-mir-20a"  "hsa-mir-210"  "hsa-mir-301a" "hsa-mir-3677"</span>
+<span class="co">#&gt; [17] "hsa-mir-4772" "hsa-mir-99a"</span></code></pre></div>
 </div>
 <div id="step-3a-impute-expression-of-a-single-mirna-of-interest-using-imirage-in-the-test-dataset" class="section level2">
 <h2 class="hasAnchor">
