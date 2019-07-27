@@ -70,8 +70,8 @@ for (i in 1:ncol(GA.mir)) {
 #Plot imputation correlations in comparison to cross-validation results
 plot(Pred.Cors, CV.full[,1], xlab="Imputation accuracy", ylab="Cross-validation accuracy", main="Imputation performance", pch=16)
 
-## ----eval=FALSE----------------------------------------------------------
-#  load("TCGA_BRCA_Datasets.RData")
+## ------------------------------------------------------------------------
+load("TCGA_BRCA_Datasets.RData")
 
 ## ------------------------------------------------------------------------
 #Here, we filter the miRNA datasets to retain all miRNAs that are expressed above a level of 0 in atleast 75% of the samples

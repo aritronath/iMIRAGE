@@ -46,7 +46,7 @@ provided for constructing imputation models. The package also includes the examp
 ----
 
 # Quick Start Guide 
-In this example, we will use the two **indepedent** miRNA data sets that were derived from the Cancer Genome Atlas (TCGA) Breast Cancer (BRCA) project. These data sets are automatically available when the iMIRAGE package library is loaded. 
+In this example, we will use the two **independent** miRNA data sets that were derived from the Cancer Genome Atlas (TCGA) Breast Cancer (BRCA) project. These data sets are automatically available when the iMIRAGE package library is loaded. 
 
 ###Datasets:
 1. Training: *GA.pcg*, *GA.mir*
@@ -138,7 +138,7 @@ plot(Pred.Cors, CV.full[,1], xlab="Imputation accuracy", ylab="Cross-validation 
 # Detailed guide 
 
 ## Background
-The principle behind iMIRAGE can be explained in a simplified form by stating the problem in the form of a linear model. Let us assume the user wants to obtain miRNA expression using their protein-coding data set which we will all *test*. To impute the miRNA expression using the *test* protein-coding data set, we first determine the mathematical relation between the expression of a set of miRNAs *Y* with the set of protein-coding gene expression *X* of the *training* data set, where *p* indicates the number of protein-coding genes used in the model. This number can range anywhere from 1 to *P*, where, *P = total number of protein-coding genes* available in both the training and test data sets. 
+The principle behind iMIRAGE can be explained in a simplified form by stating the problem in the form of a linear model. Let us assume the user wants to obtain miRNA expression using their protein-coding data set which we will call *test*. To impute the miRNA expression using the *test* protein-coding data set, we first determine the mathematical relation between the expression of a set of miRNAs *Y* with the set of protein-coding gene expression *X* of the *training* data set, where *p* indicates the number of protein-coding genes used in the model. This number can range anywhere from 1 to *P*, where, *P = total number of protein-coding genes* available in both the training and test data sets. 
 
 $Y^{Training} = \sum_{i=1}^{p} \beta X_{i}^{Training} + \epsilon$ 
 

@@ -73,7 +73,7 @@
       <h1>iMIRAGE Vignette</h1>
                         <h4 class="author">Aritro Nath</h4>
             
-            <h4 class="date">2019-07-23</h4>
+            <h4 class="date">2019-07-27</h4>
       
       
       <div class="hidden name"><code>imirage.Rmd</code></div>
@@ -117,7 +117,7 @@ devtools::install_github("aritronath/iMIRAGE")</a></code></pre>
 <div id="quick-start-guide" class="section level1">
 <h1 class="hasAnchor">
 <a href="#quick-start-guide" class="anchor"></a>Quick Start Guide</h1>
-<p>In this example, we will use the two <strong>indepedent</strong> miRNA data sets that were derived from the Cancer Genome Atlas (TCGA) Breast Cancer (BRCA) project. These data sets are automatically available when the iMIRAGE package library is loaded.</p>
+<p>In this example, we will use the two <strong>independent</strong> miRNA data sets that were derived from the Cancer Genome Atlas (TCGA) Breast Cancer (BRCA) project. These data sets are automatically available when the iMIRAGE package library is loaded.</p>
 <div id="datasets" class="section level3">
 <h3 class="hasAnchor">
 <a href="#datasets" class="anchor"></a>Datasets:</h3>
@@ -169,16 +169,16 @@ CV.miRNA &lt;-<span class="st"> </span><span class="kw"><a href="../reference/im
 <span class="co">#Print the accuracy metrics from each fold of the cross-validation analysis </span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(CV.miRNA)
 <span class="co">#&gt;             PCC      P-Value     RMSE</span>
-<span class="co">#&gt;  [1,] 0.6052419 4.045653e-04 2031.535</span>
-<span class="co">#&gt;  [2,] 0.7782609 1.210438e-05 1812.608</span>
-<span class="co">#&gt;  [3,] 0.7186645 2.755435e-05 1429.361</span>
-<span class="co">#&gt;  [4,] 0.7427044 1.629176e-06 1707.036</span>
-<span class="co">#&gt;  [5,] 0.6443850 7.617337e-05 1611.911</span>
-<span class="co">#&gt;  [6,] 0.6974416 3.021568e-05 1552.627</span>
-<span class="co">#&gt;  [7,] 0.7457256 1.374350e-07 1328.483</span>
-<span class="co">#&gt;  [8,] 0.7255696 7.943030e-09 2291.061</span>
-<span class="co">#&gt;  [9,] 0.7464076 5.097518e-06 1875.509</span>
-<span class="co">#&gt; [10,] 0.8435447 1.663083e-07 1424.721</span>
+<span class="co">#&gt;  [1,] 0.7846767 1.787068e-10 1949.727</span>
+<span class="co">#&gt;  [2,] 0.6026273 8.730786e-04 1413.453</span>
+<span class="co">#&gt;  [3,] 0.8152174 3.042965e-06 2579.850</span>
+<span class="co">#&gt;  [4,] 0.6383399 1.350309e-03 1313.170</span>
+<span class="co">#&gt;  [5,] 0.8247556 1.835522e-12 1867.436</span>
+<span class="co">#&gt;  [6,] 0.8149973 1.589878e-06 1369.922</span>
+<span class="co">#&gt;  [7,] 0.5453441 4.081473e-04 1663.522</span>
+<span class="co">#&gt;  [8,] 0.7842742 1.265863e-06 2071.891</span>
+<span class="co">#&gt;  [9,] 0.6378299 1.225599e-04 1009.012</span>
+<span class="co">#&gt; [10,] 0.6736165 1.162472e-05 1801.099</span>
 
 <span class="co">#note: this example performs cross-validation analysis for 1 unique miRNA, hsa-let-7c. The name must match with one of the names in the train_mir object's column names</span></code></pre></div>
 </div>
@@ -196,16 +196,16 @@ CV.full &lt;-<span class="st"> </span><span class="kw"><a href="../reference/imi
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(GA.mir)[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(CV.full[,<span class="dv">1</span>] <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>)] <span class="co">#arbritarily, Spearman correlation &gt; 0.5 </span>
 <span class="co">#&gt;  [1] "hsa-let-7c"   "hsa-mir-100"  "hsa-mir-10b"  "hsa-mir-1301"</span>
 <span class="co">#&gt;  [5] "hsa-mir-1307" "hsa-mir-130b" "hsa-mir-141"  "hsa-mir-150" </span>
-<span class="co">#&gt;  [9] "hsa-mir-155"  "hsa-mir-17"   "hsa-mir-18a"  "hsa-mir-20a" </span>
+<span class="co">#&gt;  [9] "hsa-mir-17"   "hsa-mir-18a"  "hsa-mir-190b" "hsa-mir-20a" </span>
 <span class="co">#&gt; [13] "hsa-mir-210"  "hsa-mir-301a" "hsa-mir-3677" "hsa-mir-4772"</span>
 <span class="co">#&gt; [17] "hsa-mir-99a"</span>
 
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(GA.mir)[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(CV.full[,<span class="dv">2</span>] <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)] <span class="co">#P-value &lt; 0.05</span>
 <span class="co">#&gt;  [1] "hsa-let-7c"   "hsa-mir-100"  "hsa-mir-10b"  "hsa-mir-1301"</span>
-<span class="co">#&gt;  [5] "hsa-mir-1307" "hsa-mir-130b" "hsa-mir-141"  "hsa-mir-150" </span>
-<span class="co">#&gt;  [9] "hsa-mir-155"  "hsa-mir-17"   "hsa-mir-18a"  "hsa-mir-190b"</span>
-<span class="co">#&gt; [13] "hsa-mir-20a"  "hsa-mir-210"  "hsa-mir-301a" "hsa-mir-3677"</span>
-<span class="co">#&gt; [17] "hsa-mir-4772" "hsa-mir-99a"</span></code></pre></div>
+<span class="co">#&gt;  [5] "hsa-mir-1307" "hsa-mir-130b" "hsa-mir-141"  "hsa-mir-146a"</span>
+<span class="co">#&gt;  [9] "hsa-mir-150"  "hsa-mir-18a"  "hsa-mir-190b" "hsa-mir-20a" </span>
+<span class="co">#&gt; [13] "hsa-mir-210"  "hsa-mir-301a" "hsa-mir-3677" "hsa-mir-4772"</span>
+<span class="co">#&gt; [17] "hsa-mir-99a"</span></code></pre></div>
 </div>
 <div id="step-3a-impute-expression-of-a-single-mirna-of-interest-using-imirage-in-the-test-dataset" class="section level2">
 <h2 class="hasAnchor">
@@ -258,7 +258,7 @@ Pred.Cors &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rd
 <div id="background" class="section level2">
 <h2 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h2>
-<p>The principle behind iMIRAGE can be explained in a simplified form by stating the problem in the form of a linear model. Let us assume the user wants to obtain miRNA expression using their protein-coding data set which we will all <em>test</em>. To impute the miRNA expression using the <em>test</em> protein-coding data set, we first determine the mathematical relation between the expression of a set of miRNAs <em>Y</em> with the set of protein-coding gene expression <em>X</em> of the <em>training</em> data set, where <em>p</em> indicates the number of protein-coding genes used in the model. This number can range anywhere from 1 to <em>P</em>, where, <em>P = total number of protein-coding genes</em> available in both the training and test data sets.</p>
+<p>The principle behind iMIRAGE can be explained in a simplified form by stating the problem in the form of a linear model. Let us assume the user wants to obtain miRNA expression using their protein-coding data set which we will call <em>test</em>. To impute the miRNA expression using the <em>test</em> protein-coding data set, we first determine the mathematical relation between the expression of a set of miRNAs <em>Y</em> with the set of protein-coding gene expression <em>X</em> of the <em>training</em> data set, where <em>p</em> indicates the number of protein-coding genes used in the model. This number can range anywhere from 1 to <em>P</em>, where, <em>P = total number of protein-coding genes</em> available in both the training and test data sets.</p>
 <p><span class="math inline">\(Y^{Training} = \sum_{i=1}^{p} \beta X_{i}^{Training} + \epsilon\)</span></p>
 <p>The objective of iMIRAGE is to determine <span class="math inline">\(\beta\)</span> so that it can be harnessed to predict the expression of miRNA <em>Y</em> by applying the model to the <em>test</em> protein-coding data set:</p>
 <p><span class="math inline">\(Y^{Predicted} = \sum_{i=1}^{p} \beta X_{i}^{Test}\)</span></p>
@@ -382,7 +382,7 @@ CV.hs.gex2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()
 <span class="co">#&gt; R version 3.6.1 (2019-07-05)</span>
 <span class="co">#&gt; Platform: x86_64-w64-mingw32/x64 (64-bit)</span>
-<span class="co">#&gt; Running under: Windows 10 x64 (build 17763)</span>
+<span class="co">#&gt; Running under: Windows 10 x64 (build 18362)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Matrix products: default</span>
 <span class="co">#&gt; </span>
