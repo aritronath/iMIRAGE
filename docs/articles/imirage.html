@@ -169,16 +169,16 @@ CV.miRNA &lt;-<span class="st"> </span><span class="kw"><a href="../reference/im
 <span class="co">#Print the accuracy metrics from each fold of the cross-validation analysis </span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(CV.miRNA)
 <span class="co">#&gt;             PCC      P-Value     RMSE</span>
-<span class="co">#&gt;  [1,] 0.7846767 1.787068e-10 1949.727</span>
-<span class="co">#&gt;  [2,] 0.6026273 8.730786e-04 1413.453</span>
-<span class="co">#&gt;  [3,] 0.8152174 3.042965e-06 2579.850</span>
-<span class="co">#&gt;  [4,] 0.6383399 1.350309e-03 1313.170</span>
-<span class="co">#&gt;  [5,] 0.8247556 1.835522e-12 1867.436</span>
-<span class="co">#&gt;  [6,] 0.8149973 1.589878e-06 1369.922</span>
-<span class="co">#&gt;  [7,] 0.5453441 4.081473e-04 1663.522</span>
-<span class="co">#&gt;  [8,] 0.7842742 1.265863e-06 2071.891</span>
-<span class="co">#&gt;  [9,] 0.6378299 1.225599e-04 1009.012</span>
-<span class="co">#&gt; [10,] 0.6736165 1.162472e-05 1801.099</span>
+<span class="co">#&gt;  [1,] 0.5459129 1.006041e-03 2108.615</span>
+<span class="co">#&gt;  [2,] 0.7318548 6.020255e-06 1102.750</span>
+<span class="co">#&gt;  [3,] 0.8295567 1.156140e-06 1724.651</span>
+<span class="co">#&gt;  [4,] 0.7674877 3.246200e-06 2119.712</span>
+<span class="co">#&gt;  [5,] 0.7772345 6.692951e-07 1881.535</span>
+<span class="co">#&gt;  [6,] 0.6685484 6.021831e-05 1526.524</span>
+<span class="co">#&gt;  [7,] 0.6526252 3.117972e-04 2290.085</span>
+<span class="co">#&gt;  [8,] 0.7239824 5.773045e-08 1275.239</span>
+<span class="co">#&gt;  [9,] 0.8101313 1.755041e-08 1780.893</span>
+<span class="co">#&gt; [10,] 0.6779160 5.331474e-05 1618.637</span>
 
 <span class="co">#note: this example performs cross-validation analysis for 1 unique miRNA, hsa-let-7c. The name must match with one of the names in the train_mir object's column names</span></code></pre></div>
 </div>
@@ -196,16 +196,15 @@ CV.full &lt;-<span class="st"> </span><span class="kw"><a href="../reference/imi
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(GA.mir)[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(CV.full[,<span class="dv">1</span>] <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>)] <span class="co">#arbritarily, Spearman correlation &gt; 0.5 </span>
 <span class="co">#&gt;  [1] "hsa-let-7c"   "hsa-mir-100"  "hsa-mir-10b"  "hsa-mir-1301"</span>
 <span class="co">#&gt;  [5] "hsa-mir-1307" "hsa-mir-130b" "hsa-mir-141"  "hsa-mir-150" </span>
-<span class="co">#&gt;  [9] "hsa-mir-17"   "hsa-mir-18a"  "hsa-mir-190b" "hsa-mir-20a" </span>
-<span class="co">#&gt; [13] "hsa-mir-210"  "hsa-mir-301a" "hsa-mir-3677" "hsa-mir-4772"</span>
-<span class="co">#&gt; [17] "hsa-mir-99a"</span>
+<span class="co">#&gt;  [9] "hsa-mir-17"   "hsa-mir-18a"  "hsa-mir-190b" "hsa-mir-210" </span>
+<span class="co">#&gt; [13] "hsa-mir-301a" "hsa-mir-3677" "hsa-mir-4772" "hsa-mir-99a"</span>
 
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(GA.mir)[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(CV.full[,<span class="dv">2</span>] <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)] <span class="co">#P-value &lt; 0.05</span>
 <span class="co">#&gt;  [1] "hsa-let-7c"   "hsa-mir-100"  "hsa-mir-10b"  "hsa-mir-1301"</span>
-<span class="co">#&gt;  [5] "hsa-mir-1307" "hsa-mir-130b" "hsa-mir-141"  "hsa-mir-146a"</span>
-<span class="co">#&gt;  [9] "hsa-mir-150"  "hsa-mir-18a"  "hsa-mir-190b" "hsa-mir-20a" </span>
-<span class="co">#&gt; [13] "hsa-mir-210"  "hsa-mir-301a" "hsa-mir-3677" "hsa-mir-4772"</span>
-<span class="co">#&gt; [17] "hsa-mir-99a"</span></code></pre></div>
+<span class="co">#&gt;  [5] "hsa-mir-1307" "hsa-mir-130b" "hsa-mir-141"  "hsa-mir-150" </span>
+<span class="co">#&gt;  [9] "hsa-mir-155"  "hsa-mir-17"   "hsa-mir-18a"  "hsa-mir-190b"</span>
+<span class="co">#&gt; [13] "hsa-mir-20a"  "hsa-mir-210"  "hsa-mir-301a" "hsa-mir-3677"</span>
+<span class="co">#&gt; [17] "hsa-mir-4772" "hsa-mir-99a"</span></code></pre></div>
 </div>
 <div id="step-3a-impute-expression-of-a-single-mirna-of-interest-using-imirage-in-the-test-dataset" class="section level2">
 <h2 class="hasAnchor">
@@ -274,9 +273,11 @@ Pred.Cors &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rd
 <li>Both data sets must be from the same samples</li>
 <li>High-quality miRNA expression data - from small RNA-seq or miRNA arrays preferred</li>
 <li>miRNA expression from regular RNA-seq libraries are not reliable</li>
+<li>The minimum recommended sample size for training datasets is 50</li>
 </ul>
 </li>
-<li><p>Protein-coding gene expression data from the samples of interest. In the package documentation, this data set is referred by its alias <em>my_pcg</em></p></li>
+<li><p>Protein-coding gene expression data from the independent samples of interest. In the package documentation, this data set is referred by its alias <em>my_pcg</em></p></li>
+<li><p>Ideally, the training dataset should be of the same tissue-type as the independent test dataset. However, large datasets spanning multiple tissues can also be used. For example, <a href="https://portal.gdc.cancer.gov/">the pan-cancer TCGA</a> cohort covering more than 30 tissue-types can be used as training data to predict miRNA profiles of various individual cancers.</p></li>
 <li>Organizing your data before use:
 <ul>
 <li>Your data should be arranged as a <em>n x p</em> matrix, where <em>n</em> denotes samples in <em>rows</em> and <em>p</em> denotes genes/miRNA in <em>columns</em>

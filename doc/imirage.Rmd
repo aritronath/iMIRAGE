@@ -155,10 +155,13 @@ iMIRAGE assumes that not all protein-coding genes are meaningful for constructin
     + Both data sets must be from the same samples
     + High-quality miRNA expression data - from small RNA-seq or miRNA arrays preferred 
     + miRNA expression from regular RNA-seq libraries are not reliable
+    + The minimum recommended sample size for training datasets is 50
+    
+2. Protein-coding gene expression data from the independent samples of interest. In the package documentation, this data set is referred by its alias *my_pcg*
 
-2. Protein-coding gene expression data from the samples of interest. In the package documentation, this data set is referred by its alias *my_pcg*
+3. Ideally, the training dataset should be of the same tissue-type as the independent test dataset. However, large datasets spanning multiple tissues can also be used. For example, [the pan-cancer TCGA](https://portal.gdc.cancer.gov/) cohort covering more than 30 tissue-types can be used as training data to predict miRNA profiles of various individual cancers. 
 
-3. Organizing your data before use:
+4. Organizing your data before use:
     + Your data should be arranged as a *n x p* matrix, where *n* denotes samples in *rows* and *p* denotes genes/miRNA in *columns* 
     + Row names should be names of the samples 
     + Column names should be names of the gene/miRNA
