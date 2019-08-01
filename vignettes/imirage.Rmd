@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 # Introduction 
 
-**iMIRAGE** stands for *imputed microRNA (miRNA) activity from gene expression*. As the name suggests, the package imputes expression of miRNAs by constructing prediction models that only depend on the expression levels of protein-coding genes. In essence, iMIRAGE package can impute the miRNA profiles of samples where protein-coding expression data is available (for example,from or microarray or RNA-seq), but do not contain reliable miRNA expression. By utilizing a *training* data set containing both protein-coding and miRNA expression profiles, iMIRAGE trains predicts miRNA expression in the *independent* *(test)* data set of interest. 
+**iMIRAGE** stands for *imputed microRNA (miRNA) activity from gene expression*. As the name suggests, the package imputes expression of miRNAs by constructing prediction models that only depend on the expression levels of protein-coding genes. In essence, iMIRAGE package can impute the miRNA profiles of samples where protein-coding expression data is available (for example, from microarray or RNA-seq), but do not contain reliable miRNA expression. By utilizing a *training* data set containing both protein-coding and miRNA expression profiles, iMIRAGE constructs prediction models using machine-learning to impute miRNA profiles of the *independent* *(test)* data set of interest. 
 
 The iMIRAGE package also provides tools to create an integrated workflow, to harmonize, clean-up, normalize and standardize the expression data sets. In addition, the package provides an option of using miRNA-target gene pair information to construct the prediction models 
 

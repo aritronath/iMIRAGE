@@ -73,7 +73,7 @@
       <h1>iMIRAGE Vignette</h1>
                         <h4 class="author">Aritro Nath</h4>
             
-            <h4 class="date">2019-07-27</h4>
+            <h4 class="date">2019-08-01</h4>
       
       
       <div class="hidden name"><code>imirage.Rmd</code></div>
@@ -86,7 +86,7 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p><strong>iMIRAGE</strong> stands for <em>imputed microRNA (miRNA) activity from gene expression</em>. As the name suggests, the package imputes expression of miRNAs by constructing prediction models that only depend on the expression levels of protein-coding genes. In essence, iMIRAGE package can impute the miRNA profiles of samples where protein-coding expression data is available (for example,from or microarray or RNA-seq), but do not contain reliable miRNA expression. By utilizing a <em>training</em> data set containing both protein-coding and miRNA expression profiles, iMIRAGE trains predicts miRNA expression in the <em>independent</em> <em>(test)</em> data set of interest.</p>
+<p><strong>iMIRAGE</strong> stands for <em>imputed microRNA (miRNA) activity from gene expression</em>. As the name suggests, the package imputes expression of miRNAs by constructing prediction models that only depend on the expression levels of protein-coding genes. In essence, iMIRAGE package can impute the miRNA profiles of samples where protein-coding expression data is available (for example, from microarray or RNA-seq), but do not contain reliable miRNA expression. By utilizing a <em>training</em> data set containing both protein-coding and miRNA expression profiles, iMIRAGE constructs prediction models using machine-learning to impute miRNA profiles of the <em>independent</em> <em>(test)</em> data set of interest.</p>
 <p>The iMIRAGE package also provides tools to create an integrated workflow, to harmonize, clean-up, normalize and standardize the expression data sets. In addition, the package provides an option of using miRNA-target gene pair information to construct the prediction models</p>
 <div id="download-and-installation" class="section level2">
 <h2 class="hasAnchor">
@@ -168,17 +168,17 @@ CV.miRNA &lt;-<span class="st"> </span><span class="kw"><a href="../reference/im
 
 <span class="co">#Print the accuracy metrics from each fold of the cross-validation analysis </span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(CV.miRNA)
-<span class="co">#&gt;             PCC      P-Value     RMSE</span>
-<span class="co">#&gt;  [1,] 0.5459129 1.006041e-03 2108.615</span>
-<span class="co">#&gt;  [2,] 0.7318548 6.020255e-06 1102.750</span>
-<span class="co">#&gt;  [3,] 0.8295567 1.156140e-06 1724.651</span>
-<span class="co">#&gt;  [4,] 0.7674877 3.246200e-06 2119.712</span>
-<span class="co">#&gt;  [5,] 0.7772345 6.692951e-07 1881.535</span>
-<span class="co">#&gt;  [6,] 0.6685484 6.021831e-05 1526.524</span>
-<span class="co">#&gt;  [7,] 0.6526252 3.117972e-04 2290.085</span>
-<span class="co">#&gt;  [8,] 0.7239824 5.773045e-08 1275.239</span>
-<span class="co">#&gt;  [9,] 0.8101313 1.755041e-08 1780.893</span>
-<span class="co">#&gt; [10,] 0.6779160 5.331474e-05 1618.637</span>
+<span class="co">#&gt;             PCC      P-Value      RMSE</span>
+<span class="co">#&gt;  [1,] 0.6421569 6.652233e-03 1607.9770</span>
+<span class="co">#&gt;  [2,] 0.7203907 3.688712e-05 1369.3719</span>
+<span class="co">#&gt;  [3,] 0.6840176 2.602183e-05 1467.2613</span>
+<span class="co">#&gt;  [4,] 0.6628352 1.744676e-04 1824.5160</span>
+<span class="co">#&gt;  [5,] 0.7235963 4.309439e-06 1898.4681</span>
+<span class="co">#&gt;  [6,] 0.7512333 5.235529e-08 1811.2824</span>
+<span class="co">#&gt;  [7,] 0.6729700 7.005981e-05 2697.4273</span>
+<span class="co">#&gt;  [8,] 0.7908907 9.076999e-08 2199.1467</span>
+<span class="co">#&gt;  [9,] 0.6849761 2.467588e-07  827.1981</span>
+<span class="co">#&gt; [10,] 0.7393048 2.451796e-06 1376.7202</span>
 
 <span class="co">#note: this example performs cross-validation analysis for 1 unique miRNA, hsa-let-7c. The name must match with one of the names in the train_mir object's column names</span></code></pre></div>
 </div>
@@ -196,8 +196,9 @@ CV.full &lt;-<span class="st"> </span><span class="kw"><a href="../reference/imi
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(GA.mir)[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(CV.full[,<span class="dv">1</span>] <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>)] <span class="co">#arbritarily, Spearman correlation &gt; 0.5 </span>
 <span class="co">#&gt;  [1] "hsa-let-7c"   "hsa-mir-100"  "hsa-mir-10b"  "hsa-mir-1301"</span>
 <span class="co">#&gt;  [5] "hsa-mir-1307" "hsa-mir-130b" "hsa-mir-141"  "hsa-mir-150" </span>
-<span class="co">#&gt;  [9] "hsa-mir-17"   "hsa-mir-18a"  "hsa-mir-190b" "hsa-mir-210" </span>
-<span class="co">#&gt; [13] "hsa-mir-301a" "hsa-mir-3677" "hsa-mir-4772" "hsa-mir-99a"</span>
+<span class="co">#&gt;  [9] "hsa-mir-17"   "hsa-mir-18a"  "hsa-mir-190b" "hsa-mir-20a" </span>
+<span class="co">#&gt; [13] "hsa-mir-210"  "hsa-mir-301a" "hsa-mir-3677" "hsa-mir-4772"</span>
+<span class="co">#&gt; [17] "hsa-mir-99a"</span>
 
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(GA.mir)[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(CV.full[,<span class="dv">2</span>] <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span>)] <span class="co">#P-value &lt; 0.05</span>
 <span class="co">#&gt;  [1] "hsa-let-7c"   "hsa-mir-100"  "hsa-mir-10b"  "hsa-mir-1301"</span>
