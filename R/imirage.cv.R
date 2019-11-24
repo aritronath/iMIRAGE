@@ -5,7 +5,7 @@
 #' imputation model
 #'
 #' @param train_pcg training protein coding dataset. a numeric matrix with row names indicating
-#' samples, anSed column names indicating protein coding gene IDs.
+#' samples, and column names indicating protein coding gene IDs.
 #' @param train_mir training miRNA expression dataset. a numeric matrix with row names indicating
 #' samples, and column names indicating miRNA IDs
 #' @param gene_index either gene name (character) or index (column number) of miRNA to be imputed.
@@ -58,7 +58,11 @@ imirage.cv <- function (train_pcg, train_mir, gene_index, num=50, method="KNN", 
 
   cat("\nRunning ", folds,"-folds cross-validation...", sep="")
 
-  kgrp <- split(1:nrow(train_pcg), sample(1:folds, nrow(train_pcg), replace=T))
+  RS <- nrow(train_pcg) 
+  while (RS %% folds != 0) {
+    RS = RS - 1
+  }
+  kgrp <- split(sample(1:RS, RS, replace=F), 1:folds)
 
   for (k in 1:folds) {
 
